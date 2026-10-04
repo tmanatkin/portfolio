@@ -3,5 +3,5 @@ import { defineConfig } from "astro/config";
 
 export default defineConfig({
   site: "https://tmanatkin.github.io",
-  base: "/portfolio",
+  base: "/portfolio/",
 });
