@@ -1,8 +1,14 @@
+---
+import { Font } from "astro:assets";
+---
+
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+    <Font cssVariable="--font-sora" preload />
+    <Font cssVariable="--font-jetbrains-mono" preload />
     <link rel="icon" href="/portfolio/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/portfolio/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/portfolio/apple-touch-icon.png" />
@@ -20,5 +26,6 @@
     margin: 0;
     width: 100%;
     height: 100%;
+    font-family: var(--font-sora);
   }
 </style>
