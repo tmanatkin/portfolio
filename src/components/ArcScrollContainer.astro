@@ -48,9 +48,11 @@
   }
 
   .arc-line {
-    --arc-line-radius: calc(var(--arc-radius) - 5rem);
+    --arc-line-gap: calc(var(--arc-item-width) / 16); /* 5vw when items are 80% wide, stops with item max width */
+    --arc-line-radius: calc(var(--arc-radius) - var(--arc-line-gap));
     position: fixed;
-    top: calc(50% - var(--arc-line-radius));
+    top: 50%;
+    translate: 0 -50%;
     left: calc((100% - var(--arc-item-width)) / 2 - var(--arc-radius) - var(--arc-line-radius));
     width: calc(var(--arc-line-radius) * 2);
     overflow: visible; /* prevent stroke from being clipped */
