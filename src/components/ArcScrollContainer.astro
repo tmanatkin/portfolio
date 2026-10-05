@@ -1,35 +1,43 @@
 <div class="arc-scroll-container">
-  <slot />
+  <svg class="arc-line" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="50" vector-effect="non-scaling-stroke"></circle>
+  </svg>
+  <div class="arc-scroll-items">
+    <slot />
+  </div>
 </div>
 
 <style>
   .arc-scroll-container {
     --arc-radius: 200vh;
-    --arc-reach: 150vh; /* ensures animation starts and ends offscreen */
-    --arc-angle: 0.75rad; /* item starting rotation (arc-reach / arc-radius) in radians */
+    --arc-angle: 0.75; /* angle arc is limited to on each side of the center */
+    --arc-length: calc(var(--arc-radius) * var(--arc-angle));
+    --arc-item-width: min(80%, 55rem);
+    overflow: clip;
+  }
+
+  .arc-scroll-items {
     padding-block: 50vh; /* padding so the first and last items can reach mid-screen */
-    overflow: clip; /* clip offscreen items without creating a scroll container */
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
   /* :global() is astros selector to allow global styles outside of component scope */
-  .arc-scroll-container > :global(*) {
-    max-width: 55rem;
-    width: 80%;
+  .arc-scroll-items > :global(*) {
+    width: var(--arc-item-width);
     transform-origin: calc(-1 * var(--arc-radius)) 50%;
   }
 
   /* CSS animation if browser supported and no reduced motion */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
-      .arc-scroll-container > :global(*) {
+      .arc-scroll-items > :global(*) {
         animation-name: arc-scroll;
         animation-timing-function: linear;
         animation-fill-mode: both;
         animation-timeline: view();
-        animation-range: cover calc(50% - var(--arc-reach)) cover calc(50% + var(--arc-reach));
+        animation-range: cover calc(50% - var(--arc-length)) cover calc(50% + var(--arc-length));
       }
     }
   }
@@ -39,12 +47,24 @@
     will-change: transform;
   }
 
+  .arc-line {
+    --arc-line-radius: calc(var(--arc-radius) - 5rem);
+    position: fixed;
+    top: calc(50% - var(--arc-line-radius));
+    left: calc((100% - var(--arc-item-width)) / 2 - var(--arc-radius) - var(--arc-line-radius));
+    width: calc(var(--arc-line-radius) * 2);
+    overflow: visible; /* prevent stroke from being clipped */
+    fill: none;
+    stroke: red;
+    stroke-width: 5px;
+  }
+
   @keyframes arc-scroll {
     from {
-      transform: translateY(calc(-1 * var(--arc-reach))) rotate(var(--arc-angle));
+      transform: translateY(calc(-1 * var(--arc-length))) rotate(calc(var(--arc-angle) * 1rad));
     }
     to {
-      transform: translateY(var(--arc-reach)) rotate(calc(-1 * var(--arc-angle)));
+      transform: translateY(var(--arc-length)) rotate(calc(var(--arc-angle) * -1rad));
     }
   }
 </style>
@@ -53,39 +73,39 @@
   // JS fallback for browsers without CSS scroll-driven animations (Firefox)
 
   const container = document.querySelector<HTMLElement>(".arc-scroll-container");
+  const items = document.querySelector<HTMLElement>(".arc-scroll-items");
 
   const scrollItems: HTMLElement[] = [];
   const scrollItemCenters: number[] = [];
-  let radius = 0;
-  let reach = 0;
+  let arcRadius = 0;
+  let arcLength = 0;
 
   // measure the arc settings and each scroll item's center on the page
   function measureScrollItems() {
-    if (container === null) {
-      throw new Error("ArcScrollContainer: container not found");
+    if (container === null || items === null) {
+      throw new Error("ArcScrollContainer: container or items not found");
     }
 
     // turn on fallback CSS
-    container.classList.add("arc-scroll-fallback");
+    items.classList.add("arc-scroll-fallback");
 
     // clear previous measurements so re-measuring doesn't add duplicates
     scrollItems.length = 0;
     scrollItemCenters.length = 0;
 
-    for (const child of container.children) {
-      scrollItems.push(child as HTMLElement);
+    for (const item of items.children) {
+      scrollItems.push(item as HTMLElement);
     }
 
     // temporary element to convert arc measurements into px
     const temp = document.createElement("div");
     temp.style.position = "absolute";
     temp.style.visibility = "hidden";
-    temp.style.maxWidth = "none"; // clear max-width for accurate radius measurement
     temp.style.width = "var(--arc-radius)";
-    temp.style.height = "var(--arc-reach)";
+    temp.style.height = "var(--arc-length)";
     container.appendChild(temp);
-    radius = temp.offsetWidth;
-    reach = temp.offsetHeight;
+    arcRadius = temp.offsetWidth;
+    arcLength = temp.offsetHeight;
     temp.remove();
 
     // clear the arc transforms so each item is measured at its normal page position
@@ -104,12 +124,12 @@
     const middleY = window.scrollY + window.innerHeight / 2;
 
     for (let i = 0; i < scrollItems.length; i++) {
-      // limit the distance to the reach, so items past it stay at the ends of the arc
+      // items past the arc length stay at the end of the arc
       let distanceFromMiddle = scrollItemCenters[i] - middleY;
-      distanceFromMiddle = Math.max(-reach, Math.min(reach, distanceFromMiddle));
+      distanceFromMiddle = Math.max(-arcLength, Math.min(arcLength, distanceFromMiddle));
 
       // distance along the rim converted to an angle in radians
-      const angle = distanceFromMiddle / radius;
+      const angle = distanceFromMiddle / arcRadius;
 
       scrollItems[i].style.transform = `translateY(${-distanceFromMiddle}px) rotate(${angle}rad)`;
     }
