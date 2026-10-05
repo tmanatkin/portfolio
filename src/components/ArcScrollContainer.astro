@@ -1,150 +1,135 @@
 <div class="arc-scroll-container">
   <slot />
 </div>
-<div class="arc-scroll-spacer"></div>
 
 <style>
   .arc-scroll-container {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    overflow: hidden;
+    --arc-radius: 200vh;
+    --arc-reach: 150vh; /* ensures animation starts and ends offscreen */
+    --arc-angle: 0.75rad; /* item starting rotation (arc-reach / arc-radius) in radians */
+    padding-block: 50vh; /* padding so the first and last items can reach mid-screen */
+    overflow: clip; /* clip offscreen items without creating a scroll container */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  /* remove scroll items from document flow */
   /* :global() is astros selector to allow global styles outside of component scope */
   .arc-scroll-container > :global(*) {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 80%; /* width leaves the same margin on the right as contentXRatio leaves on the left */
-    transform-origin: 0 0; /* transform-origin at the top left so the script can rotate each item around its rim point */
+    max-width: 55rem;
+    width: 80%;
+    transform-origin: calc(-1 * var(--arc-radius)) 50%;
+  }
+
+  /* CSS animation if browser supported and no reduced motion */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .arc-scroll-container > :global(*) {
+        animation-name: arc-scroll;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover calc(50% - var(--arc-reach)) cover calc(50% + var(--arc-reach));
+      }
+    }
+  }
+
+  /* fallback script class additional styles */
+  .arc-scroll-fallback > :global(*) {
+    will-change: transform;
+  }
+
+  @keyframes arc-scroll {
+    from {
+      transform: translateY(calc(-1 * var(--arc-reach))) rotate(var(--arc-angle));
+    }
+    to {
+      transform: translateY(var(--arc-reach)) rotate(calc(-1 * var(--arc-angle)));
+    }
   }
 </style>
 
 <script>
-  const container = document.querySelector<HTMLElement>(".arc-scroll-container");
-  const spacer = document.querySelector<HTMLElement>(".arc-scroll-spacer");
+  // JS fallback for browsers without CSS scroll-driven animations (Firefox)
 
-  // wheel radius as a multiple of the viewport height, bigger is flatter
-  const radiusMultiplier = 2;
-  // left edge of an item at mid-screen, as a fraction of the viewport width
-  const contentXRatio = 0.1;
-  // items past this angle are hidden so they never wrap around the wheel
-  const maxVisibleAngle = Math.PI / 2;
+  const container = document.querySelector<HTMLElement>(".arc-scroll-container");
 
   const scrollItems: HTMLElement[] = [];
-  const scrollItemHeights: number[] = [];
   const scrollItemCenters: number[] = [];
+  let radius = 0;
+  let reach = 0;
 
-  // measure all scroll items for screen arc placement as spacer height is calculated
+  // measure the arc settings and each scroll item's center on the page
   function measureScrollItems() {
-    // if no container or spacer, throw error
-    if (container === null || spacer === null) {
-      throw new Error(`ArcScrollContainer: Container: ${container} or Spacer: ${spacer} not found`);
+    if (container === null) {
+      throw new Error("ArcScrollContainer: container not found");
     }
+
+    // turn on fallback CSS
+    container.classList.add("arc-scroll-fallback");
 
     // clear previous measurements so re-measuring doesn't add duplicates
     scrollItems.length = 0;
-    scrollItemHeights.length = 0;
     scrollItemCenters.length = 0;
-
-    const viewportHeight = window.innerHeight;
 
     for (const child of container.children) {
       scrollItems.push(child as HTMLElement);
     }
 
-    // if no scroll items, set height to 0 and return
-    if (scrollItems.length === 0) {
-      spacer.style.height = "0px";
-      return;
-    }
+    // temporary element to convert arc measurements into px
+    const temp = document.createElement("div");
+    temp.style.position = "absolute";
+    temp.style.visibility = "hidden";
+    temp.style.maxWidth = "none"; // clear max-width for accurate radius measurement
+    temp.style.width = "var(--arc-radius)";
+    temp.style.height = "var(--arc-reach)";
+    container.appendChild(temp);
+    radius = temp.offsetWidth;
+    reach = temp.offsetHeight;
+    temp.remove();
 
-    // set top of first scroll item
-    let scrollItemTop = viewportHeight / 2 - scrollItems[0].offsetHeight / 2;
+    // clear the arc transforms so each item is measured at its normal page position
+    for (const scrollItem of scrollItems) {
+      scrollItem.style.transform = "";
+    }
 
     for (const scrollItem of scrollItems) {
-      const scrollItemHeight = scrollItem.offsetHeight;
-      const scrollItemCenter = scrollItemTop + scrollItemHeight / 2;
-      scrollItemHeights.push(scrollItemHeight);
-      scrollItemCenters.push(scrollItemCenter);
-      scrollItemTop = scrollItemTop + scrollItemHeight;
+      const rect = scrollItem.getBoundingClientRect();
+      scrollItemCenters.push(rect.top + window.scrollY + rect.height / 2);
     }
-
-    const lastScrollItemCenter = scrollItemCenters[scrollItemCenters.length - 1];
-    spacer.style.height = `${lastScrollItemCenter + viewportHeight / 2}px`;
   }
 
-  // place each scroll item on the wheel's rim based on its distance from the middle of the screen
+  // move each scroll item along the arc
   function positionScrollItems() {
-    const viewportHeight = window.innerHeight;
-    const scrollY = window.scrollY;
-
-    // wheel center sits off the left edge, level with the middle of the screen
-    const radius = radiusMultiplier * viewportHeight;
-    const contentX = contentXRatio * window.innerWidth;
-    const wheelCenterX = contentX - radius;
-    const wheelCenterY = viewportHeight / 2;
+    const middleY = window.scrollY + window.innerHeight / 2;
 
     for (let i = 0; i < scrollItems.length; i++) {
-      const distanceFromMiddle = scrollItemCenters[i] - scrollY - viewportHeight / 2;
+      // limit the distance to the reach, so items past it stay at the ends of the arc
+      let distanceFromMiddle = scrollItemCenters[i] - middleY;
+      distanceFromMiddle = Math.max(-reach, Math.min(reach, distanceFromMiddle));
 
-      // distance along the rim converted to an angle in radians, 0 at the middle of the screen
+      // distance along the rim converted to an angle in radians
       const angle = distanceFromMiddle / radius;
 
-      if (Math.abs(angle) > maxVisibleAngle) {
-        scrollItems[i].style.visibility = "hidden";
-        continue;
-      }
-      scrollItems[i].style.visibility = "visible";
-
-      // point on the rim where the item's left middle edge sits
-      const rimX = wheelCenterX + radius * Math.cos(angle);
-      const rimY = wheelCenterY + radius * Math.sin(angle);
-
-      // move to the rim point, tilt with the wheel, then shift up so the item is centered on that point
-      const halfHeight = scrollItemHeights[i] / 2;
-      scrollItems[i].style.transform =
-        `translate(${rimX}px, ${rimY}px) rotate(${angle}rad) translate(0, ${-halfHeight}px)`;
+      scrollItems[i].style.transform = `translateY(${-distanceFromMiddle}px) rotate(${angle}rad)`;
     }
   }
 
-  let isFrameRequested = false;
-
-  // only reposition once per frame, no matter how many scroll events fire
-  function handleScroll() {
-    if (isFrameRequested) {
-      return;
-    }
-
-    isFrameRequested = true;
-    requestAnimationFrame(() => {
-      positionScrollItems();
-      isFrameRequested = false;
-    });
+  // re-measure and reposition scroll items
+  function updateScrollItems() {
+    measureScrollItems();
+    positionScrollItems();
   }
 
-  let isResizeFrameRequested = false;
+  const supportsScrollTimeline = CSS.supports("animation-timeline: view()");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // only re-measure once per frame, no matter how many resize events fire
-  function handleResize() {
-    if (isResizeFrameRequested) {
-      return;
-    }
-
-    isResizeFrameRequested = true;
-    requestAnimationFrame(() => {
-      measureScrollItems();
-      positionScrollItems();
-      isResizeFrameRequested = false;
-    });
+  // run fallback when the CSS scroll animation isn't supported and reduced motion is not on
+  if (!supportsScrollTimeline && !prefersReducedMotion) {
+    updateScrollItems();
+    window.addEventListener("scroll", positionScrollItems, { passive: true });
+    window.addEventListener("resize", updateScrollItems);
+    window.addEventListener("load", updateScrollItems);
+    document.fonts.ready.then(updateScrollItems);
   }
-
-  measureScrollItems();
-  positionScrollItems();
-
-  // let new scroll functions handle scrolling on actual scroll
-  window.addEventListener("scroll", handleScroll, { passive: true });
-  window.addEventListener("resize", handleResize);
 </script>
