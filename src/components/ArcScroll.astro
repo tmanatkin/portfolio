@@ -1,5 +1,5 @@
-<div class="arc-scroll-container">
-  <svg class="arc-line" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<div class="arc-scroll">
+  <svg class="arc-scroll-line" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
     <circle cx="50" cy="50" r="50" vector-effect="non-scaling-stroke"></circle>
   </svg>
   <div class="arc-scroll-items">
@@ -12,7 +12,7 @@
     scroll-snap-type: y mandatory;
   }
 
-  .arc-scroll-container {
+  .arc-scroll {
     --arc-radius: 200vh;
     --arc-angle: 0.75; /* angle arc is limited to on each side of the center */
     --arc-length: calc(var(--arc-radius) * var(--arc-angle));
@@ -40,7 +40,7 @@
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
       .arc-scroll-items :global(.arc-scroll-item) {
-        animation-name: arc-scroll;
+        animation-name: arc-rotate;
         animation-timing-function: linear;
         animation-fill-mode: both;
         animation-timeline: view();
@@ -54,7 +54,7 @@
     will-change: transform;
   }
 
-  .arc-line {
+  .arc-scroll-line {
     --arc-line-gap: calc(var(--arc-item-width) / 16); /* 5vw when items are 80% wide, stops with item max width */
     --arc-line-radius: calc(var(--arc-radius) - var(--arc-line-gap));
     position: fixed;
@@ -68,7 +68,7 @@
     stroke-width: 5px;
   }
 
-  @keyframes arc-scroll {
+  @keyframes arc-rotate {
     from {
       transform: translateY(calc(-1 * var(--arc-length))) rotate(calc(var(--arc-angle) * 1rad));
     }
@@ -81,7 +81,7 @@
 <script>
   // JS fallback for browsers without CSS scroll-driven animations (Firefox)
 
-  const container = document.querySelector<HTMLElement>(".arc-scroll-container");
+  const container = document.querySelector<HTMLElement>(".arc-scroll");
   const items = document.querySelector<HTMLElement>(".arc-scroll-items");
 
   const scrollItems: HTMLElement[] = [];
@@ -92,7 +92,7 @@
   // measure the arc settings and each scroll item's center on the page
   function measureScrollItems() {
     if (container === null || items === null) {
-      throw new Error("ArcScrollContainer: container or items not found");
+      throw new Error("ArcScroll: container or items not found");
     }
 
     // turn on fallback CSS
@@ -130,7 +130,7 @@
       let distanceFromMiddle = scrollItemCenters[i] - middleY;
       distanceFromMiddle = Math.max(-arcLength, Math.min(arcLength, distanceFromMiddle));
 
-      // distance along the rim converted to an angle in radians
+      // distance along the arc converted to an angle in radians
       const angle = distanceFromMiddle / arcRadius;
 
       scrollItems[i].style.transform = `translateY(${-distanceFromMiddle}px) rotate(${angle}rad)`;
