@@ -8,6 +8,10 @@
 </div>
 
 <style>
+  :global(html) {
+    scroll-snap-type: y mandatory;
+  }
+
   .arc-scroll-container {
     --arc-radius: 200vh;
     --arc-angle: 0.75; /* angle arc is limited to on each side of the center */
@@ -23,16 +27,19 @@
     align-items: center;
   }
 
-  /* :global() is astros selector to allow global styles outside of component scope */
-  .arc-scroll-items > :global(*) {
+  .arc-scroll-items > :global(.arc-scroll-snap) {
     width: var(--arc-item-width);
+    scroll-snap-align: center;
+  }
+
+  .arc-scroll-items :global(.arc-scroll-item) {
     transform-origin: calc(-1 * var(--arc-radius)) 50%;
   }
 
   /* CSS animation if browser supported and no reduced motion */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
-      .arc-scroll-items > :global(*) {
+      .arc-scroll-items :global(.arc-scroll-item) {
         animation-name: arc-scroll;
         animation-timing-function: linear;
         animation-fill-mode: both;
@@ -43,7 +50,7 @@
   }
 
   /* fallback script class additional styles */
-  .arc-scroll-fallback > :global(*) {
+  .arc-scroll-fallback :global(.arc-scroll-item) {
     will-change: transform;
   }
 
@@ -95,10 +102,6 @@
     scrollItems.length = 0;
     scrollItemCenters.length = 0;
 
-    for (const item of items.children) {
-      scrollItems.push(item as HTMLElement);
-    }
-
     // temporary element to convert arc measurements into px
     const temp = document.createElement("div");
     temp.style.position = "absolute";
@@ -110,13 +113,10 @@
     arcLength = temp.offsetHeight;
     temp.remove();
 
-    // clear the arc transforms so each item is measured at its normal page position
-    for (const scrollItem of scrollItems) {
-      scrollItem.style.transform = "";
-    }
-
-    for (const scrollItem of scrollItems) {
-      const rect = scrollItem.getBoundingClientRect();
+    // measure the snap element since it's never transformed, and move the item inside it along the arc
+    for (const item of items.children) {
+      const rect = item.getBoundingClientRect();
+      scrollItems.push(item.firstElementChild as HTMLElement);
       scrollItemCenters.push(rect.top + window.scrollY + rect.height / 2);
     }
   }
