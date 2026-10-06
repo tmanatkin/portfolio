@@ -27,6 +27,14 @@
     align-items: center;
   }
 
+  /* move snap points to sit right at the scroll edge */
+  .arc-scroll-items > :global(.arc-scroll-snap:first-child) {
+    translate: 0 -50%;
+  }
+  .arc-scroll-items > :global(.arc-scroll-snap:last-child) {
+    translate: 0 50%;
+  }
+
   .arc-scroll-items > :global(.arc-scroll-snap) {
     width: var(--arc-item-width);
     scroll-snap-align: center;
@@ -45,6 +53,15 @@
         animation-fill-mode: both;
         animation-timeline: view();
         animation-range: cover calc(50% - var(--arc-length)) cover calc(50% + var(--arc-length));
+      }
+
+      /* shift animation range back from translating the snap objects to scroll edge */
+      .arc-scroll-items > :global(.arc-scroll-snap:first-child .arc-scroll-item) {
+        animation-range: entry-crossing calc(50vh - var(--arc-length)) entry-crossing calc(50vh + var(--arc-length));
+      }
+      .arc-scroll-items > :global(.arc-scroll-snap:last-child .arc-scroll-item) {
+        animation-range: entry-crossing calc(50vh + 100% - var(--arc-length)) entry-crossing
+          calc(50vh + 100% + var(--arc-length));
       }
     }
   }
