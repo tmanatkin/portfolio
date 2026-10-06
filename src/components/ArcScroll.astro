@@ -7,6 +7,7 @@
   <div class="arc-scroll-items">
     <slot />
   </div>
+  <div class="arc-scroll-overscroll-fix"></div>
 </div>
 
 <style>
@@ -92,6 +93,15 @@
     fill: none;
     stroke: red;
     stroke-width: 5px;
+  }
+
+  /* no clue why this works, but it allows the arc line to be visible in the overscroll */
+  .arc-scroll-overscroll-fix {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
   }
 
   @keyframes arc-rotate {
