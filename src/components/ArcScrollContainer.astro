@@ -114,9 +114,9 @@
     temp.remove();
 
     // measure the snap element since it's never transformed, and move the item inside it along the arc
-    for (const item of items.children) {
-      const rect = item.getBoundingClientRect();
-      scrollItems.push(item.firstElementChild as HTMLElement);
+    for (const snap of items.children) {
+      const rect = snap.getBoundingClientRect();
+      scrollItems.push(snap.firstElementChild as HTMLElement);
       scrollItemCenters.push(rect.top + window.scrollY + rect.height / 2);
     }
   }
