@@ -79,6 +79,9 @@
 </style>
 
 <script>
+  // start reloads at the top to fix possible scroll position arc sync issues
+  history.scrollRestoration = "manual";
+
   // JS fallback for browsers without CSS scroll-driven animations (Firefox)
 
   const container = document.querySelector<HTMLElement>(".arc-scroll");
