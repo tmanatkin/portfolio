@@ -1,7 +1,9 @@
 <div class="arc-scroll">
-  <svg class="arc-scroll-line" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="50" cy="50" r="50" vector-effect="non-scaling-stroke"></circle>
-  </svg>
+  <div class="arc-scroll-line">
+    <svg class="arc-scroll-line-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="50" vector-effect="non-scaling-stroke"></circle>
+    </svg>
+  </div>
   <div class="arc-scroll-items">
     <slot />
   </div>
@@ -17,10 +19,10 @@
     --arc-angle: 0.75; /* angle arc is limited to on each side of the center */
     --arc-length: calc(var(--arc-radius) * var(--arc-angle));
     --arc-item-width: min(80%, 55rem);
-    overflow: clip;
   }
 
   .arc-scroll-items {
+    overflow: clip;
     padding-block: 50vh; /* padding so the first and last items can reach mid-screen */
     display: flex;
     flex-direction: column;
@@ -74,8 +76,15 @@
   .arc-scroll-line {
     --arc-line-gap: calc(var(--arc-item-width) / 16); /* 5vw when items are 80% wide, stops with item max width */
     --arc-line-radius: calc(var(--arc-radius) - var(--arc-line-gap));
-    position: fixed;
+
+    position: sticky; /* lets the line move with overscroll */
     top: 50%;
+    height: 0;
+  }
+
+  .arc-scroll-line-svg {
+    position: absolute;
+    top: 0;
     translate: 0 -50%;
     left: calc((100% - var(--arc-item-width)) / 2 - var(--arc-radius) - var(--arc-line-radius));
     width: calc(var(--arc-line-radius) * 2);
