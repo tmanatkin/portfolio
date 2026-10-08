@@ -1,0 +1,128 @@
+{
+  "profile": {
+    "name": "Tanner Atkin",
+    "titles": ["Full-Stack Software Engineer", "BYU Grad", "Web Dev Instructor"],
+    "tagline": "I love to learn by building new things.",
+    "email": "tmanatkin@gmail.com"
+  },
+  "links": [
+    { "id": "github", "label": "GitHub", "url": "https://github.com/tmanatkin" },
+    { "id": "linkedin", "label": "LinkedIn", "url": "https://linkedin.com/in/tanneratkin" },
+    { "id": "resume", "label": "Resume", "url": "/portfolio/Tanner_Atkin_Resume.pdf" }
+  ],
+  "skills": [
+    { "id": "javascript", "name": "JavaScript" },
+    { "id": "typescript", "name": "TypeScript" },
+    { "id": "html", "name": "HTML" },
+    { "id": "css", "name": "CSS" },
+    { "id": "python", "name": "Python" },
+    { "id": "sql", "name": "SQL" },
+    { "id": "nodejs", "name": "Node.js" },
+    { "id": "react", "name": "React" },
+    { "id": "nextjs", "name": "Next.js" },
+    { "id": "scss", "name": "SCSS" },
+    { "id": "tailwind", "name": "Tailwind" },
+    { "id": "jest", "name": "Jest" },
+    { "id": "docker", "name": "Docker" },
+    { "id": "aws", "name": "AWS" },
+    { "id": "terraform", "name": "Terraform" },
+    { "id": "claude-code", "name": "Claude Code" },
+    { "id": "github-copilot", "name": "GitHub Copilot" }
+  ],
+  "projects": [
+    {
+      "id": "race-raffle",
+      "name": "Race Raffle",
+      "repo": "https://github.com/tmanatkin/race-raffle",
+      "description": "Self-serve raffle system for race fundraisers with verified prize pickup.",
+      "highlight": "Used by 150+ people at a local nonprofit event.",
+      "stack": ["Next.js", "Supabase", "TypeScript", "shadcn", "Tailwind"],
+      "image": "../assets/projects/race-raffle.png"
+    },
+    {
+      "id": "insurance-risk-assessment",
+      "name": "Insurance Risk Assessment",
+      "repo": "https://github.com/tmanatkin/insurance-risk-assessment",
+      "description": "Home and auto insurance risk assessment with AI-generated recommendations.",
+      "highlight": "Led development of a startup proof of concept on a small team.",
+      "stack": ["Next.js", "Vercel AI SDK", "Supabase", "TypeScript", "shadcn", "Tailwind"],
+      "image": "../assets/projects/insurance-risk-assessment.png"
+    },
+    {
+      "id": "bagpipe-tuner",
+      "name": "Bagpipe Tuner",
+      "repo": "https://github.com/tmanatkin/bagpipe-tuner",
+      "description": "Tuner for the Highland bagpipes with drone filtering.",
+      "highlight": "Built to learn pitch detection for an instrument I play.",
+      "website": "https://bagpipe-tuner.fly.dev",
+      "stack": ["Svelte", "TypeScript", "Docker", "Fly.io"],
+      "image": "../assets/projects/bagpipe-tuner.png"
+    },
+    {
+      "id": "resume-builder",
+      "name": "Resume Builder",
+      "repo": "https://github.com/tmanatkin/resume-builder",
+      "description": "Resume and cover letter builder that converts Markdown to PDF.",
+      "highlight": "Built for and still used to update my resume.",
+      "stack": ["Node.js", "Markdown", "Puppeteer", "SCSS"],
+      "image": "../assets/projects/resume-builder.png"
+    },
+    {
+      "id": "catan-board-generator",
+      "name": "Catan Board Generator",
+      "repo": "https://github.com/tmanatkin/catan-board-generator",
+      "description": "Wave function collapse board generator for Catan using custom rules.",
+      "highlight": "Explored procedural generation with a favorite game.",
+      "stack": ["TypeScript", "Vite"],
+      "image": "../assets/projects/catan-board-generator.png"
+    },
+    {
+      "id": "is120-intro-to-web-dev",
+      "name": "IS 120 - Introduction to Web Development",
+      "repo": "https://github.com/tmanatkin/is120-intro-to-web-dev",
+      "description": "Teaching materials for an introductory web development class at BYU.",
+      "highlight": "Taught as the Winter 2026 instructor.",
+      "stack": ["HTML", "CSS", "JavaScript"],
+      "image": "../assets/projects/is120-intro-to-web-dev.png"
+    },
+    {
+      "id": "signal-cio",
+      "name": "Signal CIO",
+      "repo": "https://github.com/tmanatkin/signal-cio",
+      "description": "Website for Signal CIO, an independent fractional CIO and IT strategy consultant.",
+      "highlight": "Designed for a family member's consulting business.",
+      "website": "https://signalcio.com",
+      "stack": ["React", "TypeScript", "Vite"],
+      "image": "../assets/projects/signal-cio.png"
+    },
+    {
+      "id": "dodo-2d-platformer",
+      "name": "Dodo 2D Platformer",
+      "repo": "https://github.com/tmanatkin/dodo-2d-platformer",
+      "description": "2D Unity platformer featuring a dodo.",
+      "highlight": "Made for fun to learn game development in C#.",
+      "website": "https://tmanatkin.github.io/dodo-2d-platformer",
+      "stack": ["Unity", "C#"],
+      "image": "../assets/projects/dodo-2d-platformer.png"
+    },
+    {
+      "id": "nextjs-supabase-starter",
+      "name": "Next.js Supabase Starter",
+      "repo": "https://github.com/tmanatkin/nextjs-supabase-starter",
+      "description": "Starter template for a Next.js app with Supabase authentication.",
+      "highlight": "Used as the base for Insurance Risk Assessment.",
+      "stack": ["Next.js", "Supabase", "TypeScript", "shadcn", "Tailwind"],
+      "image": "../assets/projects/nextjs-supabase-starter.png"
+    },
+    {
+      "id": "portfolio-2024",
+      "name": "Portfolio 2024",
+      "repo": "https://github.com/tmanatkin/portfolio-2024",
+      "description": "Personal developer portfolio website.",
+      "highlight": "Archived and replaced with a redesign.",
+      "website": "https://tanneratkin.com",
+      "stack": ["React", "TypeScript", "Vite"],
+      "image": "../assets/projects/portfolio-2024.png"
+    }
+  ]
+}
