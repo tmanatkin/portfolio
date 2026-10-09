@@ -17,7 +17,7 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     <h2>{name}</h2>
     <p class="project-description">{description}</p>
     <p class="project-highlight">{highlight}</p>
-    <ul class="project-stack" aria-label="Tech stack">{stack.map((item) => <li>{item}</li>)}</ul>
+    <ul class="project-stack pill-list" aria-label="Tech stack">{stack.map((item) => <li>{item}</li>)}</ul>
     <a class="project-repo" href={repo} aria-label={`${name} Repo`}>Repo</a>
     {
       website && (
@@ -43,14 +43,5 @@ const { name, description, highlight, repo, website, stack, image } = project.da
   .project img {
     width: 50%;
     height: 50%;
-  }
-
-  .project-stack {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    column-gap: 1rem;
-    list-style: none;
-    padding: 0;
   }
 </style>

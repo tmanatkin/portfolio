@@ -32,6 +32,8 @@ import { Font } from "astro:assets";
   html {
     --color-bg: #141110;
     --color-text: #e9e3e2;
+    --color-primary: #e53400;
+    --gradient-primary: linear-gradient(135deg, #e02800 0%, #f25900 100%);
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-sora);
@@ -49,5 +51,22 @@ import { Font } from "astro:assets";
 
   p {
     text-wrap: pretty;
+  }
+
+  .pill-list {
+    list-style: none;
+    padding: 0;
+    margin: -0.25rem; /* cancels outer half pill margins so edges line up */
+    text-wrap: pretty;
+  }
+
+  .pill-list li {
+    display: inline-block;
+    margin: 0.25rem;
+    background: var(--gradient-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    color: var(--color-bg);
+    font-weight: 700;
   }
 </style>

@@ -28,7 +28,7 @@ const { name, roles, tagline, email } = profile.data;
       ))
     }
   </ul>
-  <ul class="title-skills" aria-label="Skills">
+  <ul class="title-skills pill-list" aria-label="Skills">
     {skills.map((skill) => <li>{skill.data.name}</li>)}
   </ul>
 </header>
@@ -42,8 +42,7 @@ const { name, roles, tagline, email } = profile.data;
   }
 
   .title-roles,
-  .title-links,
-  .title-skills {
+  .title-links {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
