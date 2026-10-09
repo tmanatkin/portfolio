@@ -1,62 +1,47 @@
 ---
+import { getCollection, getEntry } from "astro:content";
+
 import Layout from "../layouts/Layout.astro";
-import Title from "../components/Title.astro";
 import ArcScroll from "../components/ArcScroll.astro";
 import ArcScrollSnap from "../components/ArcScrollSnap.astro";
+import Title from "../components/Title.astro";
+import Project from "../components/Project.astro";
+import Footer from "../components/Footer.astro";
+
+const byPosition = (a: { data: { position: number } }, b: { data: { position: number } }) =>
+  a.data.position - b.data.position;
+
+const profile = await getEntry("profile", "profile");
+if (profile === undefined) {
+  throw new Error("Profile entry not found in content.json");
+}
+const links = (await getCollection("links")).sort(byPosition);
+const skills = (await getCollection("skills")).sort(byPosition);
+const projects = (await getCollection("projects")).sort(byPosition);
 ---
 
 <Layout>
   <ArcScroll>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
-    <ArcScrollSnap><Title /></ArcScrollSnap>
+    <ArcScrollSnap><Title profile={profile} links={links} skills={skills} /></ArcScrollSnap>
+    <main>
+      {
+        projects.map((project) => (
+          <ArcScrollSnap>
+            <Project project={project} />
+          </ArcScrollSnap>
+        ))
+      }
+    </main>
+    <ArcScrollSnap><Footer /></ArcScrollSnap>
   </ArcScroll>
 </Layout>
+
+<style>
+  /* matches arc-scroll-items so projects have correct layout for snap scrolling */
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+</style>

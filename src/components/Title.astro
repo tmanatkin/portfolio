@@ -1,16 +1,54 @@
 ---
 import titleColor from "../assets/title-color.svg";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  profile: CollectionEntry<"profile">;
+  links: CollectionEntry<"links">[];
+  skills: CollectionEntry<"skills">[];
+}
+
+const { profile, links, skills } = Astro.props;
+const { name, roles, tagline, email } = profile.data;
 ---
 
-<div class="title">
-  <img class="title-img" src={titleColor.src} width={titleColor.width} height={titleColor.height} alt="Tanner Atkin" />
-</div>
+<header class="title">
+  <h1><img src={titleColor.src} width={titleColor.width} height={titleColor.height} alt={name} /></h1>
+  <ul class="title-roles" aria-label="Roles">
+    {roles.map((role) => <li>{role}</li>)}
+  </ul>
+  <p class="title-tagline">{tagline}</p>
+  <p class="title-email">{email}</p>
+  <ul class="title-links" aria-label="Links">
+    {
+      links.map((link) => (
+        <li>
+          <a href={link.data.url}>{link.data.label}</a>
+        </li>
+      ))
+    }
+  </ul>
+  <ul class="title-skills" aria-label="Skills">
+    {skills.map((skill) => <li>{skill.data.name}</li>)}
+  </ul>
+</header>
 
 <style>
-  .title-img {
+  .title img {
     display: block;
     width: 100%;
     height: auto;
     color: transparent; /* hides placeholder label when loading image */
+  }
+
+  .title-roles,
+  .title-links,
+  .title-skills {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 1rem;
+    list-style: none;
+    padding: 0;
   }
 </style>

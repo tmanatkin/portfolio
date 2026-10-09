@@ -5,7 +5,7 @@ import { z } from "astro/zod";
 const contentFile = "src/data/content.json";
 
 // helper function to keep JSON array positions in order
-const inOrder = (items: object[]) => items.map((item, index) => ({ ...item, order: index }));
+const addPosition = (items: object[]) => items.map((item, index) => ({ ...item, position: index }));
 
 const profile = defineCollection({
   loader: file(contentFile, {
@@ -13,7 +13,7 @@ const profile = defineCollection({
   }),
   schema: z.object({
     name: z.string(),
-    titles: z.array(z.string()),
+    roles: z.array(z.string()),
     tagline: z.string(),
     email: z.string(),
   }),
@@ -21,10 +21,10 @@ const profile = defineCollection({
 
 const links = defineCollection({
   loader: file(contentFile, {
-    parser: (text) => inOrder(JSON.parse(text).links),
+    parser: (text) => addPosition(JSON.parse(text).links),
   }),
   schema: z.object({
-    order: z.number(),
+    position: z.number(),
     label: z.string(),
     url: z.string(),
   }),
@@ -32,21 +32,21 @@ const links = defineCollection({
 
 const skills = defineCollection({
   loader: file(contentFile, {
-    parser: (text) => inOrder(JSON.parse(text).skills),
+    parser: (text) => addPosition(JSON.parse(text).skills),
   }),
   schema: z.object({
-    order: z.number(),
+    position: z.number(),
     name: z.string(),
   }),
 });
 
 const projects = defineCollection({
   loader: file(contentFile, {
-    parser: (text) => inOrder(JSON.parse(text).projects),
+    parser: (text) => addPosition(JSON.parse(text).projects),
   }),
   schema: ({ image }) =>
     z.object({
-      order: z.number(),
+      position: z.number(),
       name: z.string(),
       repo: z.string(),
       description: z.string(),

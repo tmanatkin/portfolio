@@ -1,6 +1,6 @@
 <div class="arc-scroll">
   <div class="arc-scroll-line">
-    <svg class="arc-scroll-line-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <svg class="arc-scroll-line-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <circle cx="50" cy="50" r="50" vector-effect="non-scaling-stroke"></circle>
     </svg>
   </div>
@@ -38,12 +38,13 @@
     translate: 0 50%;
   }
 
-  .arc-scroll-items > :global(.arc-scroll-snap) {
+  .arc-scroll-items :global(.arc-scroll-snap) {
     width: var(--arc-item-width);
     scroll-snap-align: center;
   }
 
   .arc-scroll-items :global(.arc-scroll-item) {
+    display: flow-root; /* keeps item margins inside snap element so they stay the same size */
     transform-origin: calc(-1 * var(--arc-radius)) 50%;
   }
 
@@ -152,7 +153,7 @@
     arcLength = temp.offsetHeight;
     temp.remove();
 
-    for (const snap of items.children) {
+    for (const snap of items.querySelectorAll(".arc-scroll-snap")) {
       const rect = snap.getBoundingClientRect();
       scrollItems.push(snap.firstElementChild as HTMLElement);
       scrollItemCenters.push(rect.top + window.scrollY + rect.height / 2);

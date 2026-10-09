@@ -1,7 +1,7 @@
 {
   "profile": {
     "name": "Tanner Atkin",
-    "titles": ["Full-Stack Software Engineer", "BYU Grad", "Web Dev Instructor"],
+    "roles": ["Full-Stack Software Engineer", "BYU Grad", "Web Dev Instructor"],
     "tagline": "I love to learn by building new things.",
     "email": "tmanatkin@gmail.com"
   },

@@ -21,13 +21,12 @@ import { Font } from "astro:assets";
   </body>
 </html>
 
-<style>
-  html,
-  body {
+<style is:global>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
     margin: 0;
-    width: 100%;
-    height: 100%;
-    font-family: var(--font-sora);
   }
 
   html {
@@ -35,5 +34,20 @@ import { Font } from "astro:assets";
     --color-text: #e9e3e2;
     background-color: var(--color-bg);
     color: var(--color-text);
+    font-family: var(--font-sora);
+  }
+
+  body {
+    line-height: 1.5;
+    overflow-wrap: break-word;
+  }
+
+  h1,
+  h2 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 </style>
