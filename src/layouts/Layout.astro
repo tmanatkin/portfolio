@@ -53,9 +53,12 @@ import { Font } from "astro:assets";
     text-wrap: pretty;
   }
 
-  .pill-list {
+  ul {
     list-style: none;
     padding: 0;
+  }
+
+  .pill-list {
     margin: -0.25rem; /* cancels outer half pill margins so edges line up */
     text-wrap: pretty;
   }
@@ -64,9 +67,10 @@ import { Font } from "astro:assets";
     display: inline-block;
     margin: 0.25rem;
     background: var(--gradient-primary);
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem 0.625rem;
     border-radius: 1rem;
     color: var(--color-bg);
+    font-size: 0.875rem;
     font-weight: 700;
   }
 </style>

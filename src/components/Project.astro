@@ -22,9 +22,8 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     {
       website && (
         <>
-          <br />
           <a class="project-website" href={website} aria-label={`${name} Website`}>
-            Website
+            Visit
           </a>
         </>
       )
@@ -42,6 +41,22 @@ const { name, description, highlight, repo, website, stack, image } = project.da
 
   .project img {
     width: 50%;
-    height: 50%;
+    height: auto;
+    border-radius: 3px;
+  }
+
+  .project h2 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+
+  .project-description,
+  .project-highlight {
+    min-height: 2lh;
+  }
+
+  .project-repo,
+  .project-website {
+    font-weight: 600;
   }
 </style>
