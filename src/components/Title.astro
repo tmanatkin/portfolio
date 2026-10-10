@@ -9,15 +9,12 @@ interface Props {
 }
 
 const { profile, links, skills } = Astro.props;
-const { name, roles, tagline, email } = profile.data;
+const { name, role, email } = profile.data;
 ---
 
 <header class="title">
   <h1><img src={titleColor.src} width={titleColor.width} height={titleColor.height} alt={name} /></h1>
-  <ul class="title-roles" aria-label="Roles">
-    {roles.map((role) => <li>{role}</li>)}
-  </ul>
-  <p class="title-tagline">{tagline}</p>
+  <p class="title-role">{role}</p>
   <p class="title-email">{email}</p>
   <ul class="title-links" aria-label="Links">
     {
@@ -41,7 +38,11 @@ const { name, roles, tagline, email } = profile.data;
     color: transparent; /* hides placeholder label when loading image */
   }
 
-  .title-roles,
+  .title-role {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
   .title-links {
     font-size: 1.125rem;
     font-weight: 600;

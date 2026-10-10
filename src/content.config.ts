@@ -13,8 +13,7 @@ const profile = defineCollection({
   }),
   schema: z.object({
     name: z.string(),
-    roles: z.array(z.string()),
-    tagline: z.string(),
+    role: z.string(),
     email: z.string(),
   }),
 });
