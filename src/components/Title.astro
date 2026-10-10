@@ -13,8 +13,10 @@ const { name, role, email } = profile.data;
 ---
 
 <header class="title">
-  <h1><img src={titleColor.src} width={titleColor.width} height={titleColor.height} alt={name} /></h1>
-  <p class="title-role">{role}</p>
+  <hgroup>
+    <h1><img src={titleColor.src} width={titleColor.width} height={titleColor.height} alt={name} /></h1>
+    <p class="title-role">{role}</p>
+  </hgroup>
   <p class="title-email">{email}</p>
   <ul class="title-links" aria-label="Links">
     {
@@ -39,7 +41,7 @@ const { name, role, email } = profile.data;
   }
 
   .title-role {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     font-weight: 600;
   }
 
