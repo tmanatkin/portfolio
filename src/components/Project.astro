@@ -18,16 +18,16 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     <p class="project-description">{description}</p>
     <p class="project-highlight">{highlight}</p>
     <ul class="project-stack tag-list" aria-label="Tech stack">{stack.map((item) => <li>{item}</li>)}</ul>
-    <a class="project-repo" href={repo} aria-label={`${name} Repo`}>Repo</a>
-    {
-      website && (
-        <>
-          <a class="project-website" href={website} aria-label={`${name} Website`}>
-            Visit
+    <div class="project-links">
+      <a class="project-repo icon-link" href={repo} aria-label={`${name} Repo`}>Repo</a>
+      {
+        website && (
+          <a class="project-website icon-link" href={website} aria-label={`${name} Website`}>
+            Website
           </a>
-        </>
-      )
-    }
+        )
+      }
+    </div>
   </div>
 </article>
 
@@ -55,8 +55,17 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     min-height: 2lh;
   }
 
-  .project-repo,
+  .project-links {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 1rem;
+  }
+
+  .project-repo {
+    --icon: url("../assets/icons/git.svg");
+  }
+
   .project-website {
-    font-weight: 600;
+    --icon: url("../assets/icons/web.svg");
   }
 </style>
