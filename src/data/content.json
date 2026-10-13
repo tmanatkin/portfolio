@@ -4,11 +4,6 @@
     "role": "Full-Stack Software Engineer",
     "email": "tmanatkin@gmail.com"
   },
-  "links": [
-    { "id": "github", "label": "GitHub", "url": "https://github.com/tmanatkin" },
-    { "id": "linkedin", "label": "LinkedIn", "url": "https://linkedin.com/in/tanneratkin" },
-    { "id": "resume", "label": "Resume", "url": "/portfolio/Tanner_Atkin_Resume.pdf" }
-  ],
   "skills": [
     { "id": "javascript", "name": "JavaScript" },
     { "id": "typescript", "name": "TypeScript" },
@@ -24,6 +19,21 @@
     { "id": "sql", "name": "SQL" },
     { "id": "docker", "name": "Docker" },
     { "id": "aws", "name": "AWS" }
+  ],
+  "links": [
+    { "id": "github", "label": "GitHub", "url": "https://github.com/tmanatkin", "icon": "../assets/icons/github.svg" },
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "url": "https://linkedin.com/in/tanneratkin",
+      "icon": "../assets/icons/linkedin.svg"
+    },
+    {
+      "id": "resume",
+      "label": "Resume",
+      "url": "/portfolio/Tanner_Atkin_Resume.pdf",
+      "icon": "../assets/icons/resume.svg"
+    }
   ],
   "projects": [
     {

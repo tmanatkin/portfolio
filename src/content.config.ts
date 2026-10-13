@@ -18,17 +18,6 @@ const profile = defineCollection({
   }),
 });
 
-const links = defineCollection({
-  loader: file(contentFile, {
-    parser: (text) => addPosition(JSON.parse(text).links),
-  }),
-  schema: z.object({
-    position: z.number(),
-    label: z.string(),
-    url: z.string(),
-  }),
-});
-
 const skills = defineCollection({
   loader: file(contentFile, {
     parser: (text) => addPosition(JSON.parse(text).skills),
@@ -37,6 +26,19 @@ const skills = defineCollection({
     position: z.number(),
     name: z.string(),
   }),
+});
+
+const links = defineCollection({
+  loader: file(contentFile, {
+    parser: (text) => addPosition(JSON.parse(text).links),
+  }),
+  schema: ({ image }) =>
+    z.object({
+      position: z.number(),
+      label: z.string(),
+      url: z.string(),
+      icon: image(),
+    }),
 });
 
 const projects = defineCollection({

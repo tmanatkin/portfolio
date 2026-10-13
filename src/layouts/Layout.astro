@@ -33,6 +33,7 @@ import { Font } from "astro:assets";
     --color-bg: #141110;
     --color-text: #e9e3e2;
     --color-primary: #e53400;
+    --color-primary-light: #ff6a2b;
     --gradient-primary: linear-gradient(135deg, #e02800 0%, #f25900 100%);
     background-color: var(--color-bg);
     color: var(--color-text);
@@ -81,5 +82,23 @@ import { Font } from "astro:assets";
     content: "/"; /* fallback */
     content: "/" / "";
     color: var(--color-primary);
+  }
+
+  .icon-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15em;
+    text-underline-offset: 0.15em;
+    font-weight: 600;
+    color: var(--color-primary-light);
+  }
+
+  /* masked instead of <img> so the icon follows the link's text color */
+  .icon-link::before {
+    content: "";
+    width: 1em;
+    height: 1em;
+    background-color: currentColor;
+    mask: var(--icon) center / contain no-repeat;
   }
 </style>
