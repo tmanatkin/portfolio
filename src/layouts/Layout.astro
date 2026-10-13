@@ -58,19 +58,28 @@ import { Font } from "astro:assets";
     padding: 0;
   }
 
-  .pill-list {
-    margin: -0.25rem; /* cancels outer half pill margins so edges line up */
+  .tag-list {
+    --item-gap: 2rem;
+    margin-right: calc(-1 * var(--item-gap)); /* cancels trailing margin on each line */
     text-wrap: balance;
+    overflow: clip; /* hides separator before first item on each line */
   }
 
-  .pill-list li {
+  .tag-list li {
     display: inline-block;
-    margin: 0.25rem;
-    background: var(--gradient-primary);
-    padding: 0.25rem 0.625rem;
-    border-radius: 1rem;
-    color: var(--color-bg);
+    position: relative;
+    margin-right: var(--item-gap);
+    font-family: var(--font-jetbrains-mono);
     font-size: 0.875rem;
-    font-weight: 700;
+    font-weight: 300;
+  }
+
+  .tag-list li::before {
+    position: absolute;
+    left: calc(-1 * var(--item-gap) / 2);
+    transform: translateX(-50%);
+    content: "/"; /* fallback */
+    content: "/" / "";
+    color: var(--color-primary);
   }
 </style>
