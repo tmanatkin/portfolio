@@ -31,7 +31,9 @@ const { name, role, email } = profile.data;
       ))
     }
     <li class="header-email">
-      <button type="button" data-email={email} aria-label={`Copy email ${email}`}>{email}</button>
+      <button type="button" data-email={email} aria-label={`Copy email ${email}`}>
+        <span>{email}</span>
+      </button>
     </li>
   </ul>
 </header>
@@ -80,6 +82,23 @@ const { name, role, email } = profile.data;
     font: inherit;
     color: inherit;
     cursor: pointer;
+  }
+
+  .header-email button span {
+    /* start background at 0% width */
+    background: linear-gradient(var(--color-primary-light-faded), var(--color-primary-light-faded)) left / 0% 100%
+      no-repeat;
+    transition: background-size 0.3s ease;
+  }
+
+  .header-email button:focus-visible span {
+    background-size: 100% 100%;
+  }
+
+  @media (hover: hover) {
+    .header-email button:hover span {
+      background-size: 100% 100%;
+    }
   }
 
   /* masked instead of <img> so the icon follows the text color */

@@ -39,6 +39,7 @@ import { Font } from "astro:assets";
     --color-text-muted: #beaca7;
     --color-primary: #e53400;
     --color-primary-light: #ff6a2b;
+    --color-primary-light-faded: color-mix(in srgb, var(--color-primary-light) 35%, transparent);
     --gradient-primary: linear-gradient(135deg, #e02800 0%, #f25900 100%);
     background-color: var(--color-bg);
     color: var(--color-text);
@@ -113,15 +114,11 @@ import { Font } from "astro:assets";
 
   .icon-links a span {
     --underline-height: 2px;
-    --underline-opacity: 35%;
     /* solid line starts at 0% and sits on top of faded line */
     background:
-      linear-gradient(currentColor, currentColor) left bottom / 0% var(--underline-height) no-repeat,
-      linear-gradient(
-          color-mix(in srgb, currentColor var(--underline-opacity), transparent),
-          color-mix(in srgb, currentColor var(--underline-opacity), transparent)
-        )
-        left bottom / 100% var(--underline-height) no-repeat;
+      linear-gradient(var(--color-primary-light), var(--color-primary-light)) left bottom / 0% var(--underline-height) no-repeat,
+      linear-gradient(var(--color-primary-light-faded), var(--color-primary-light-faded)) left bottom / 100%
+        var(--underline-height) no-repeat;
     transition: background-size 0.3s ease;
   }
 
