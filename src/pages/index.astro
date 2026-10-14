@@ -42,12 +42,7 @@ const projects = (await getCollection("projects")).sort(byPosition);
     display: grid;
     grid-auto-rows: 1fr;
     justify-items: center;
-    gap: 4rem;
+    gap: var(--arc-item-gap);
     width: 100%;
-  }
-
-  /* lets each project fill its row */
-  main :global(.arc-scroll-item) {
-    height: 100%;
   }
 </style>

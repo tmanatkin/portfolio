@@ -20,6 +20,7 @@
     --arc-angle: 0.75; /* angle arc is limited to on each side of the center */
     --arc-length: calc(var(--arc-radius) * var(--arc-angle));
     --arc-item-width: min(80%, 55rem);
+    --arc-item-gap: 15vh;
   }
 
   .arc-scroll-items {
@@ -36,6 +37,7 @@
   }
   .arc-scroll-items > :global(.arc-scroll-snap:last-child) {
     translate: 0 50%;
+    margin-top: var(--arc-item-gap);
   }
 
   .arc-scroll-items :global(.arc-scroll-snap) {
@@ -45,6 +47,7 @@
 
   .arc-scroll-items :global(.arc-scroll-item) {
     display: flow-root; /* keeps item margins inside snap element so they stay the same size */
+    height: 100%; /* fills the snap element */
     transform-origin: calc(-1 * var(--arc-radius)) 50%;
   }
 
