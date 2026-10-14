@@ -37,6 +37,18 @@ const { name, role, email } = profile.data;
 </header>
 
 <style>
+  .title {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .title hgroup {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
   .title img {
     display: block;
     width: 100%;
@@ -47,6 +59,14 @@ const { name, role, email } = profile.data;
   .title-role {
     font-size: 2.5rem;
     font-weight: 600;
+  }
+
+  .title-skills {
+    font-size: 1.375rem;
+  }
+
+  .title-links {
+    font-size: 1.25rem;
   }
 
   .title-email button {

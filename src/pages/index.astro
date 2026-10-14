@@ -37,12 +37,17 @@ const projects = (await getCollection("projects")).sort(byPosition);
 </Layout>
 
 <style>
-  /* matches arc-scroll-items so projects have correct layout for snap scrolling */
+  /* use grid with fractional units so each project stays the same height */
   main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    grid-auto-rows: 1fr;
+    justify-items: center;
     gap: 4rem;
     width: 100%;
+  }
+
+  /* lets each project fill its row */
+  main :global(.arc-scroll-item) {
+    height: 100%;
   }
 </style>

@@ -14,24 +14,30 @@ const { name, description, highlight, repo, website, stack, image } = project.da
   {/* heading and description already cover image alt text */}
   <Image src={image} alt="" />
   <div class="project-info">
-    <h2>{name}</h2>
-    <p class="project-description">{description}</p>
-    <p class="project-highlight">{highlight}</p>
-    <ul class="project-stack tag-list" aria-label="Tech stack" role="list">{stack.map((item) => <li>{item}</li>)}</ul>
-    <ul class="project-links icon-links" aria-label="Links" role="list">
-      <li>
-        <a class="project-repo" href={repo} aria-label={`${name} Repo`}>Repo</a>
-      </li>
-      {
-        website && (
-          <li>
-            <a class="project-website" href={website} aria-label={`${name} Website`}>
-              Website
-            </a>
-          </li>
-        )
-      }
-    </ul>
+    <div class="project-info-text">
+      <h2>{name}</h2>
+      <div class="project-info-text-paragraph">
+        <p class="project-description">{description}</p>
+        <p class="project-highlight">{highlight}</p>
+      </div>
+    </div>
+    <div class="project-info-details">
+      <ul class="project-stack tag-list" aria-label="Tech stack" role="list">{stack.map((item) => <li>{item}</li>)}</ul>
+      <ul class="project-links icon-links" aria-label="Links" role="list">
+        <li>
+          <a class="project-repo" href={repo} aria-label={`${name} Repo`}>Repo</a>
+        </li>
+        {
+          website && (
+            <li>
+              <a class="project-website" href={website} aria-label={`${name} Website`}>
+                Website
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </div>
   </div>
 </article>
 
@@ -39,24 +45,38 @@ const { name, description, highlight, repo, website, stack, image } = project.da
   .project {
     display: flex;
     flex-direction: row;
-    align-items: center;
     gap: 2rem;
+    height: 100%;
   }
 
   .project img {
+    align-self: center;
     width: 50%;
     height: auto;
     border-radius: 3px;
   }
 
+  .project-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .project-info-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .project-info-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
   .project h2 {
     font-size: 1.75rem;
     line-height: 1.2;
-  }
-
-  .project-description,
-  .project-highlight {
-    min-height: 2lh;
   }
 
   .project-repo {
