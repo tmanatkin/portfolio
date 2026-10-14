@@ -17,10 +17,10 @@ const { name, role, email } = profile.data;
     <h1><img src={titleColor.src} width={titleColor.width} height={titleColor.height} alt={name} /></h1>
     <p class="title-role">{role}</p>
   </hgroup>
-  <ul class="title-skills tag-list" aria-label="Skills">
+  <ul class="title-skills tag-list" aria-label="Skills" role="list">
     {skills.map((skill) => <li>{skill.data.name}</li>)}
   </ul>
-  <ul class="icon-links" aria-label="Links">
+  <ul class="title-links icon-links" aria-label="Links" role="list">
     {
       links.map((link) => (
         <li>
@@ -31,7 +31,7 @@ const { name, role, email } = profile.data;
       ))
     }
     <li class="title-email">
-      <button type="button" data-email={email}>{email}</button>
+      <button type="button" data-email={email} aria-label={`Copy email ${email}`}>{email}</button>
     </li>
   </ul>
 </header>

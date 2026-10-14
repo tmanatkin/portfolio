@@ -17,8 +17,8 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     <h2>{name}</h2>
     <p class="project-description">{description}</p>
     <p class="project-highlight">{highlight}</p>
-    <ul class="project-stack tag-list" aria-label="Tech stack">{stack.map((item) => <li>{item}</li>)}</ul>
-    <ul class="icon-links" aria-label="Links">
+    <ul class="project-stack tag-list" aria-label="Tech stack" role="list">{stack.map((item) => <li>{item}</li>)}</ul>
+    <ul class="project-links icon-links" aria-label="Links" role="list">
       <li>
         <a class="project-repo" href={repo} aria-label={`${name} Repo`}>Repo</a>
       </li>
