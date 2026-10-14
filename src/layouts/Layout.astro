@@ -84,7 +84,6 @@ import { Font } from "astro:assets";
     margin-right: var(--item-gap);
     font-family: var(--font-jetbrains-mono);
     font-size: 0.875em;
-    font-weight: 400;
     color: var(--color-text-muted);
   }
 
@@ -116,7 +115,8 @@ import { Font } from "astro:assets";
     --underline-height: 2px;
     /* solid line starts at 0% and sits on top of faded line */
     background:
-      linear-gradient(var(--color-primary-light), var(--color-primary-light)) left bottom / 0% var(--underline-height) no-repeat,
+      linear-gradient(var(--color-primary-light), var(--color-primary-light)) left bottom / 0% var(--underline-height)
+        no-repeat,
       linear-gradient(var(--color-primary-light-faded), var(--color-primary-light-faded)) left bottom / 100%
         var(--underline-height) no-repeat;
     transition: background-size 0.3s ease;
