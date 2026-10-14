@@ -50,6 +50,12 @@ import { Font } from "astro:assets";
     overflow-wrap: break-word;
   }
 
+  :focus-visible {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
   h1,
   h2 {
     text-wrap: balance;
