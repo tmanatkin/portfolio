@@ -73,21 +73,33 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     gap: 0.75rem;
   }
 
+  .project h2 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+
   .project-info-text-paragraph {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
 
+  .project-description {
+    color: var(--color-text-muted);
+  }
+
+  .project-highlight::before {
+    padding-right: 0.5em;
+    content: ">"; /* fallback */
+    content: ">" / "";
+    font-family: var(--font-jetbrains-mono);
+    color: var(--color-primary-light);
+  }
+
   .project-info-details {
     display: flex;
     flex-direction: column;
     gap: 0.375rem;
-  }
-
-  .project h2 {
-    font-size: 1.75rem;
-    line-height: 1.2;
   }
 
   .project-repo {
