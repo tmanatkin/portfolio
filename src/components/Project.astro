@@ -25,13 +25,15 @@ const { name, description, highlight, repo, website, stack, image } = project.da
       <ul class="project-stack tag-list" aria-label="Tech stack" role="list">{stack.map((item) => <li>{item}</li>)}</ul>
       <ul class="project-links icon-links" aria-label="Links" role="list">
         <li>
-          <a class="project-repo" href={repo} aria-label={`${name} Repo`}>Repo</a>
+          <a class="project-repo" href={repo} aria-label={`${name} Repo`}>
+            <span>Repo</span>
+          </a>
         </li>
         {
           website && (
             <li>
               <a class="project-website" href={website} aria-label={`${name} Website`}>
-                Website
+                <span>Website</span>
               </a>
             </li>
           )

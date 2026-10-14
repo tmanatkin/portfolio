@@ -100,9 +100,33 @@ import { Font } from "astro:assets";
     display: inline-flex;
     align-items: center;
     gap: 0.15em;
-    text-underline-offset: 0.15em;
+    text-decoration: none;
     font-weight: 600;
     color: var(--color-primary-light);
+  }
+
+  .icon-links a span {
+    --underline-height: 2px;
+    --underline-opacity: 35%;
+    /* solid line starts at 0% and sits on top of faded line */
+    background:
+      linear-gradient(currentColor, currentColor) left bottom / 0% var(--underline-height) no-repeat,
+      linear-gradient(
+          color-mix(in srgb, currentColor var(--underline-opacity), transparent),
+          color-mix(in srgb, currentColor var(--underline-opacity), transparent)
+        )
+        left bottom / 100% var(--underline-height) no-repeat;
+    transition: background-size 0.3s ease;
+  }
+
+  .icon-links a:focus-visible span {
+    background-size: 100% var(--underline-height);
+  }
+
+  @media (hover: hover) {
+    .icon-links a:hover span {
+      background-size: 100% var(--underline-height);
+    }
   }
 
   /* masked instead of <img> so the icon follows the link's text color */

@@ -25,7 +25,7 @@ const { name, role, email } = profile.data;
       links.map((link) => (
         <li>
           <a href={link.data.url} style={`--icon: url("${link.data.icon.src}")`}>
-            {link.data.label}
+            <span>{link.data.label}</span>
           </a>
         </li>
       ))
