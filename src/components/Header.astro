@@ -1,5 +1,6 @@
 ---
 import nameLogo from "../assets/name-logo.svg";
+import ContactLinks from "./ContactLinks.astro";
 import type { CollectionEntry } from "astro:content";
 
 interface Props {
@@ -20,22 +21,7 @@ const { name, role, email } = profile.data;
   <ul class="header-skills tag-list" aria-label="Skills" role="list">
     {skills.map((skill) => <li>{skill.data.name}</li>)}
   </ul>
-  <ul class="header-links icon-links" aria-label="Links" role="list">
-    {
-      links.map((link) => (
-        <li>
-          <a href={link.data.url} style={`--icon: url("${link.data.icon.src}")`}>
-            <span>{link.data.label}</span>
-          </a>
-        </li>
-      ))
-    }
-    <li class="header-email">
-      <button type="button" data-email={email} aria-label={`Copy email ${email}`}>
-        <span>{email}</span>
-      </button>
-    </li>
-  </ul>
+  <ContactLinks links={links} email={email} />
 </header>
 
 <style>
@@ -67,99 +53,4 @@ const { name, role, email } = profile.data;
   .header-skills {
     font-size: 1.25rem;
   }
-
-  .header-links {
-    font-size: 1.125rem;
-  }
-
-  .header-email button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.15em;
-    /* strips default button chrome so it reads like the surrounding text */
-    padding: 0;
-    border: none;
-    background: none;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-  }
-
-  .header-email button span {
-    /* start background at 0% width */
-    background: linear-gradient(var(--color-primary-light-faded), var(--color-primary-light-faded)) left / 0% 100%
-      no-repeat;
-    transition: background-size 0.3s ease;
-  }
-
-  .header-email button:focus-visible span {
-    background-size: 100% 100%;
-  }
-
-  @media (hover: hover) {
-    .header-email button:hover span {
-      background-size: 100% 100%;
-    }
-  }
-
-  /* masked instead of <img> so the icon follows the text color */
-  .header-email button::after {
-    content: "";
-    width: 1em;
-    height: 1em;
-    background-color: currentColor;
-    mask: url("../assets/icons/copy.svg") center / contain no-repeat;
-  }
-
-  /* second mask to reveal check icon */
-  .header-email button.copied::after {
-    mask:
-      url("../assets/icons/check.svg") center / 100% 100% no-repeat,
-      linear-gradient(#000, #000) left / 0% 100% no-repeat; /* mask color doesn't matter */
-    mask-composite: intersect;
-    animation: copy-check-wipe 0.3s ease forwards;
-  }
-
-  /* use restored class so animation doesn't play on page load */
-  .header-email button.restored::after {
-    animation: copy-fade-in 0.3s ease;
-  }
-
-  @keyframes copy-check-wipe {
-    to {
-      mask-size:
-        100% 100%,
-        100% 100%;
-    }
-  }
-
-  @keyframes copy-fade-in {
-    from {
-      opacity: 0;
-    }
-  }
 </style>
-
-<script>
-  const email = document.querySelector<HTMLButtonElement>(".header-email button");
-  let timer = 0;
-
-  email?.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(email.dataset.email ?? "");
-    } catch {
-      return;
-    }
-
-    // let repeat clicks replay the wipe
-    email.classList.remove("copied", "restored");
-    void email.offsetWidth;
-    email.classList.add("copied");
-
-    // restart delay so repeated clicks keep the check up
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      email.classList.replace("copied", "restored");
-    }, 5000);
-  });
-</script>
