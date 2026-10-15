@@ -2,7 +2,8 @@
   "profile": {
     "name": "Tanner Atkin",
     "role": "Full-Stack Software Engineer",
-    "email": "tmanatkin@gmail.com"
+    "email": "tmanatkin@gmail.com",
+    "repo": "https://github.com/tmanatkin/portfolio"
   },
   "skills": [
     { "id": "javascript", "name": "JavaScript" },

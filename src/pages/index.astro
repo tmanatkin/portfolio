@@ -32,7 +32,7 @@ const projects = (await getCollection("projects")).sort(byPosition);
         ))
       }
     </main>
-    <ArcScrollSnap><Footer /></ArcScrollSnap>
+    <ArcScrollSnap><Footer profile={profile} links={links} /></ArcScrollSnap>
   </ArcScroll>
 </Layout>
 

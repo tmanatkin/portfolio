@@ -15,6 +15,7 @@ const profile = defineCollection({
     name: z.string(),
     role: z.string(),
     email: z.string(),
+    repo: z.string(),
   }),
 });
 
