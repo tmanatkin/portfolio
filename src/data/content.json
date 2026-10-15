@@ -22,18 +22,23 @@
     { "id": "aws", "name": "AWS" }
   ],
   "links": [
-    { "id": "github", "label": "GitHub", "url": "https://github.com/tmanatkin", "icon": "../assets/icons/github.svg" },
+    {
+      "id": "github",
+      "label": "GitHub",
+      "url": "https://github.com/tmanatkin",
+      "icon": "../assets/icons/ph--github-logo-bold.svg"
+    },
     {
       "id": "linkedin",
       "label": "LinkedIn",
       "url": "https://linkedin.com/in/tanneratkin",
-      "icon": "../assets/icons/linkedin.svg"
+      "icon": "../assets/icons/ph--linkedin-logo-bold.svg"
     },
     {
       "id": "resume",
       "label": "Resume",
       "url": "/portfolio/Tanner_Atkin_Resume.pdf",
-      "icon": "../assets/icons/resume.svg"
+      "icon": "../assets/icons/ph--file-text-bold.svg"
     }
   ],
   "projects": [

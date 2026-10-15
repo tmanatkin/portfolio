@@ -67,13 +67,13 @@ const { links, email } = Astro.props;
     width: 1em;
     height: 1em;
     background-color: currentColor;
-    mask: url("../assets/icons/copy.svg") center / contain no-repeat;
+    mask: url("../assets/icons/ph--copy-bold.svg") center / contain no-repeat;
   }
 
   /* second mask to reveal check icon */
   .contact-links-email.copied::after {
     mask:
-      url("../assets/icons/check.svg") center / 100% 100% no-repeat,
+      url("../assets/icons/ph--check-bold.svg") center / 100% 100% no-repeat,
       linear-gradient(#000, #000) left / 0% 100% no-repeat; /* mask color doesn't matter */
     mask-composite: intersect;
     animation: copy-check-wipe var(--animation-duration) ease forwards;

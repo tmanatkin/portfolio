@@ -139,15 +139,15 @@ import { Font } from "astro:assets";
     width: 1em;
     height: 1em;
     background-color: currentColor;
-    mask: var(--icon, url("../assets/icons/link.svg")) center / contain no-repeat; /* included link as a fallback icon */
+    mask: var(--icon, url("../assets/icons/ph--link-bold.svg")) center / contain no-repeat; /* included link as a fallback icon */
   }
 
   /* global so project and footer repo links share the same icon */
   .repo-link {
-    --icon: url("../assets/icons/git.svg");
+    --icon: url("../assets/icons/ph--git-fork-bold.svg");
   }
 
   .website-link {
-    --icon: url("../assets/icons/web.svg");
+    --icon: url("../assets/icons/ph--globe-simple-bold.svg");
   }
 </style>
