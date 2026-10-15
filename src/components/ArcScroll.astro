@@ -48,6 +48,19 @@
     margin-top: var(--arc-item-gap);
   }
 
+  /* padding set from the first and last item heights by the script, translating them left an extra half height gap */
+  .arc-scroll.enabled .arc-scroll-items {
+    padding-block: calc(var(--arc-half-view) - var(--arc-first-half-height))
+      calc(var(--arc-half-view) - var(--arc-last-half-height));
+  }
+  .arc-scroll.enabled .arc-scroll-items > :global(.arc-scroll-snap:first-child) {
+    translate: none;
+    margin-bottom: var(--arc-item-gap);
+  }
+  .arc-scroll.enabled .arc-scroll-items > :global(.arc-scroll-snap:last-child) {
+    translate: none;
+  }
+
   .arc-scroll-items :global(.arc-scroll-snap) {
     width: var(--arc-item-width);
     scroll-snap-align: center;
@@ -143,6 +156,12 @@
     arcRadius = temp.offsetWidth;
     arcLength = temp.offsetHeight;
     temp.remove();
+
+    // first and last item half heights for the padding that centers them at the scroll edges
+    const first = items.firstElementChild as HTMLElement;
+    const last = items.lastElementChild as HTMLElement;
+    items.style.setProperty("--arc-first-half-height", `${first.getBoundingClientRect().height / 2}px`);
+    items.style.setProperty("--arc-last-half-height", `${last.getBoundingClientRect().height / 2}px`);
 
     spacer.style.height = `${items.offsetHeight}px`;
 
