@@ -7,12 +7,13 @@
   <div class="arc-scroll-items">
     <slot />
   </div>
-  <div class="arc-scroll-overscroll-fix"></div>
 </div>
+<div class="arc-scroll-spacer"></div>
 
 <style>
   :global(html) {
     scroll-snap-type: y mandatory;
+    overscroll-behavior-y: none;
   }
 
   .arc-scroll {
@@ -22,6 +23,12 @@
     --arc-item-width: min(80%, 55rem);
     --arc-item-gap: 15vh;
     --arc-half-view: 50vh;
+  }
+
+  /* arc scroll is fixed to viewport, JS moves items with transform */
+  .arc-scroll.enabled {
+    position: fixed;
+    inset: 0;
   }
 
   .arc-scroll-items {
@@ -46,47 +53,46 @@
     scroll-snap-align: center;
   }
 
+  /* scroll snapping used on spacer instead */
+  .arc-scroll.enabled .arc-scroll-items :global(.arc-scroll-snap) {
+    scroll-snap-align: none;
+  }
+
   .arc-scroll-items :global(.arc-scroll-item) {
     display: flow-root; /* keeps item margins inside snap element so they stay the same size */
     height: 100%; /* fills the snap element */
     transform-origin: calc(-1 * var(--arc-radius)) 50%;
   }
 
-  /* CSS animation if browser supported and no reduced motion */
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .arc-scroll-items :global(.arc-scroll-item) {
-        animation-name: arc-rotate;
-        animation-timing-function: linear;
-        animation-fill-mode: both;
-        animation-timeline: view();
-        animation-range: cover calc(50% - var(--arc-length)) cover calc(50% + var(--arc-length));
-      }
-
-      /* shift animation range back from translating the snap objects to scroll edge */
-      .arc-scroll-items > :global(.arc-scroll-snap:first-child .arc-scroll-item) {
-        animation-range: entry-crossing calc(var(--arc-half-view) - var(--arc-length)) entry-crossing
-          calc(var(--arc-half-view) + var(--arc-length));
-      }
-      .arc-scroll-items > :global(.arc-scroll-snap:last-child .arc-scroll-item) {
-        animation-range: entry-crossing calc(var(--arc-half-view) + 100% - var(--arc-length)) entry-crossing
-          calc(var(--arc-half-view) + 100% + var(--arc-length));
-      }
-    }
+  .arc-scroll.enabled .arc-scroll-items :global(.arc-scroll-item) {
+    will-change: transform;
   }
 
-  /* fallback script class additional styles */
-  .arc-scroll-fallback :global(.arc-scroll-item) {
-    will-change: transform;
+  /* gives the page scroll height and snap points */
+  .arc-scroll-spacer {
+    position: relative;
+    pointer-events: none;
+  }
+
+  /* untransformed so scroll flings decelerate into them */
+  .arc-scroll-spacer :global(.arc-scroll-snap-point) {
+    position: absolute;
+    width: 1px;
+    height: 2px;
+    scroll-snap-align: center;
   }
 
   .arc-scroll-line {
     --arc-line-gap: calc(var(--arc-item-width) / 16); /* 5vw when items are 80% wide, stops with item max width */
     --arc-line-radius: calc(var(--arc-radius) - var(--arc-line-gap));
-
-    position: sticky; /* lets the line move with overscroll */
+    position: sticky; /* keeps the line at mid-screen on the flat page */
     top: 50%;
     height: 0;
+  }
+
+  .arc-scroll.enabled .arc-scroll-line {
+    position: absolute;
+    width: 100%;
   }
 
   .arc-scroll-line-svg {
@@ -100,52 +106,32 @@
     stroke: var(--color-primary);
     stroke-width: 5px;
   }
-
-  /* no clue why this works, but it allows the arc line to be visible in the overscroll */
-  .arc-scroll-overscroll-fix {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: 1px;
-  }
-
-  @keyframes arc-rotate {
-    from {
-      transform: translateY(calc(-1 * var(--arc-length))) rotate(calc(var(--arc-angle) * 1rad));
-    }
-    to {
-      transform: translateY(var(--arc-length)) rotate(calc(var(--arc-angle) * -1rad));
-    }
-  }
 </style>
 
 <script>
-  // start reloads at the top to fix possible scroll position arc sync issues
-  history.scrollRestoration = "manual";
-
-  // JS fallback for browsers without CSS scroll-driven animations (Firefox)
-
   const container = document.querySelector<HTMLElement>(".arc-scroll");
   const items = document.querySelector<HTMLElement>(".arc-scroll-items");
+  const spacer = document.querySelector<HTMLElement>(".arc-scroll-spacer");
 
   const scrollItems: HTMLElement[] = [];
   const scrollItemCenters: number[] = [];
   let arcRadius = 0;
   let arcLength = 0;
 
-  // measure the arc settings and each scroll item's center on the page
+  // measure arc and scroll items
+  // build spacer height and snap points from them
   function measureScrollItems() {
-    if (container === null || items === null) {
-      throw new Error("ArcScroll: container or items not found");
+    if (container === null || items === null || spacer === null) {
+      throw new Error("ArcScroll: container, items, or spacer not found");
     }
 
-    // turn on fallback CSS
-    items.classList.add("arc-scroll-fallback");
+    // enable arc in CSS
+    container.classList.add("enabled");
 
     // clear previous measurements so re-measuring doesn't add duplicates
     scrollItems.length = 0;
     scrollItemCenters.length = 0;
+    spacer.replaceChildren();
 
     // temporary element to convert arc measurements into px
     const temp = document.createElement("div");
@@ -158,10 +144,19 @@
     arcLength = temp.offsetHeight;
     temp.remove();
 
+    spacer.style.height = `${items.offsetHeight}px`;
+
+    const itemsTop = items.getBoundingClientRect().top;
     for (const snap of items.querySelectorAll(".arc-scroll-snap")) {
       const rect = snap.getBoundingClientRect();
+      const center = rect.top - itemsTop + rect.height / 2;
       scrollItems.push(snap.firstElementChild as HTMLElement);
-      scrollItemCenters.push(rect.top + window.scrollY + rect.height / 2);
+      scrollItemCenters.push(center);
+
+      const point = document.createElement("div");
+      point.className = "arc-scroll-snap-point";
+      point.style.top = `${center - 1}px`; // half the point height
+      spacer.appendChild(point);
     }
   }
 
@@ -177,7 +172,8 @@
       // distance along the arc converted to an angle in radians
       const angle = distanceFromMiddle / arcRadius;
 
-      scrollItems[i].style.transform = `translateY(${-distanceFromMiddle}px) rotate(${angle}rad)`;
+      // -scrollY scrolls item because container is fixed
+      scrollItems[i].style.transform = `translateY(${-window.scrollY - distanceFromMiddle}px) rotate(${angle}rad)`;
     }
   }
 
@@ -187,15 +183,30 @@
     positionScrollItems();
   }
 
-  const supportsScrollTimeline = CSS.supports("animation-timeline: view()");
+  // scroll page to keyboard focused element
+  function scrollToFocus(event: FocusEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.matches(":focus-visible")) {
+      return;
+    }
+
+    const index = scrollItems.indexOf(target.closest<HTMLElement>(".arc-scroll-item") as HTMLElement);
+    if (index === -1) {
+      return;
+    }
+
+    window.scrollTo({ top: scrollItemCenters[index] - window.innerHeight / 2, behavior: "smooth" });
+  }
+
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // run fallback when the CSS scroll animation isn't supported and reduced motion is not on
-  if (!supportsScrollTimeline && !prefersReducedMotion) {
+  // reduced motion keeps the flat page
+  if (!prefersReducedMotion) {
     updateScrollItems();
     window.addEventListener("scroll", positionScrollItems, { passive: true });
     window.addEventListener("resize", updateScrollItems);
     window.addEventListener("load", updateScrollItems);
     document.fonts.ready.then(updateScrollItems);
+    container?.addEventListener("focusin", scrollToFocus);
   }
 </script>
