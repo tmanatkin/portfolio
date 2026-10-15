@@ -48,7 +48,7 @@ const { links, email } = Astro.props;
     /* start background at 0% width */
     background: linear-gradient(var(--color-primary-light-faded), var(--color-primary-light-faded)) left / 0% 100%
       no-repeat;
-    transition: background-size 0.3s ease;
+    transition: background-size var(--animation-duration) ease;
   }
 
   .contact-links-email:focus-visible span {
@@ -76,12 +76,12 @@ const { links, email } = Astro.props;
       url("../assets/icons/check.svg") center / 100% 100% no-repeat,
       linear-gradient(#000, #000) left / 0% 100% no-repeat; /* mask color doesn't matter */
     mask-composite: intersect;
-    animation: copy-check-wipe 0.3s ease forwards;
+    animation: copy-check-wipe var(--animation-duration) ease forwards;
   }
 
   /* use restored class so animation doesn't play on page load */
   .contact-links-email.restored::after {
-    animation: copy-fade-in 0.3s ease;
+    animation: copy-fade-in var(--animation-duration) ease;
   }
 
   @keyframes copy-check-wipe {

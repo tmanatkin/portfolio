@@ -8,14 +8,14 @@ export default defineConfig({
     {
       provider: fontProviders.fontsource(),
       name: "Sora",
-      cssVariable: "--font-sora",
+      cssVariable: "--font-sans",
       weights: ["100 800"],
       styles: ["normal"],
     },
     {
       provider: fontProviders.fontsource(),
       name: "JetBrains Mono",
-      cssVariable: "--font-jetbrains-mono",
+      cssVariable: "--font-mono",
       weights: ["100 800"],
       styles: ["normal"],
       fallbacks: ["monospace"],

@@ -21,11 +21,12 @@
     --arc-length: calc(var(--arc-radius) * var(--arc-angle));
     --arc-item-width: min(80%, 55rem);
     --arc-item-gap: 15vh;
+    --arc-half-view: 50vh;
   }
 
   .arc-scroll-items {
     overflow: clip;
-    padding-block: 50vh; /* padding so the first and last items can reach mid-screen */
+    padding-block: var(--arc-half-view); /* padding so the first and last items can reach mid-screen */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -64,11 +65,12 @@
 
       /* shift animation range back from translating the snap objects to scroll edge */
       .arc-scroll-items > :global(.arc-scroll-snap:first-child .arc-scroll-item) {
-        animation-range: entry-crossing calc(50vh - var(--arc-length)) entry-crossing calc(50vh + var(--arc-length));
+        animation-range: entry-crossing calc(var(--arc-half-view) - var(--arc-length)) entry-crossing
+          calc(var(--arc-half-view) + var(--arc-length));
       }
       .arc-scroll-items > :global(.arc-scroll-snap:last-child .arc-scroll-item) {
-        animation-range: entry-crossing calc(50vh + 100% - var(--arc-length)) entry-crossing
-          calc(50vh + 100% + var(--arc-length));
+        animation-range: entry-crossing calc(var(--arc-half-view) + 100% - var(--arc-length)) entry-crossing
+          calc(var(--arc-half-view) + 100% + var(--arc-length));
       }
     }
   }

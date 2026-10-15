@@ -12,8 +12,8 @@ import { Font } from "astro:assets";
       content="Full-stack software engineer designing and building web applications with modern frameworks."
     />
     <meta name="color-scheme" content="dark" />
-    <Font cssVariable="--font-sora" preload />
-    <Font cssVariable="--font-jetbrains-mono" preload />
+    <Font cssVariable="--font-sans" preload />
+    <Font cssVariable="--font-mono" preload />
     <link rel="icon" href="/portfolio/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/portfolio/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/portfolio/apple-touch-icon.png" />
@@ -41,9 +41,10 @@ import { Font } from "astro:assets";
     --color-primary-light: #ff6a2b;
     --color-primary-light-faded: color-mix(in srgb, var(--color-primary-light) 35%, transparent);
     --gradient-primary: linear-gradient(135deg, #e02800 0%, #f25900 100%);
+    --animation-duration: 0.3s;
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-family: var(--font-sora);
+    font-family: var(--font-sans);
   }
 
   body {
@@ -83,7 +84,7 @@ import { Font } from "astro:assets";
     display: inline-block;
     position: relative;
     margin-right: var(--item-gap);
-    font-family: var(--font-jetbrains-mono);
+    font-family: var(--font-mono);
     color: var(--color-text-muted);
   }
 
@@ -119,7 +120,7 @@ import { Font } from "astro:assets";
         no-repeat,
       linear-gradient(var(--color-primary-light-faded), var(--color-primary-light-faded)) left bottom / 100%
         var(--underline-height) no-repeat;
-    transition: background-size 0.3s ease;
+    transition: background-size var(--animation-duration) ease;
   }
 
   .icon-link:focus-visible span {
