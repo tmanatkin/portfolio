@@ -53,6 +53,7 @@ const { name, description, highlight, repo, website, stack, image } = project.da
 
   .project img {
     align-self: center;
+    flex-shrink: 0; /* prevents unloaded image from shrinking */
     width: 50%;
     height: auto;
     border-radius: 3px;
