@@ -19,8 +19,8 @@ const { links, email } = Astro.props;
       </li>
     ))
   }
-  <li class="contact-links-email">
-    <button type="button" data-email={email} aria-label={`Copy email ${email}`}>
+  <li>
+    <button class="contact-links-email" type="button" data-email={email} aria-label={`Copy email ${email}`}>
       <span>{email}</span>
     </button>
   </li>
@@ -31,7 +31,7 @@ const { links, email } = Astro.props;
     font-size: 1.125rem;
   }
 
-  .contact-links-email button {
+  .contact-links-email {
     display: inline-flex;
     align-items: center;
     gap: 0.15em;
@@ -44,25 +44,25 @@ const { links, email } = Astro.props;
     cursor: pointer;
   }
 
-  .contact-links-email button span {
+  .contact-links-email span {
     /* start background at 0% width */
     background: linear-gradient(var(--color-primary-light-faded), var(--color-primary-light-faded)) left / 0% 100%
       no-repeat;
     transition: background-size 0.3s ease;
   }
 
-  .contact-links-email button:focus-visible span {
+  .contact-links-email:focus-visible span {
     background-size: 100% 100%;
   }
 
   @media (hover: hover) {
-    .contact-links-email button:hover span {
+    .contact-links-email:hover span {
       background-size: 100% 100%;
     }
   }
 
   /* masked instead of <img> so the icon follows the text color */
-  .contact-links-email button::after {
+  .contact-links-email::after {
     content: "";
     width: 1em;
     height: 1em;
@@ -71,7 +71,7 @@ const { links, email } = Astro.props;
   }
 
   /* second mask to reveal check icon */
-  .contact-links-email button.copied::after {
+  .contact-links-email.copied::after {
     mask:
       url("../assets/icons/check.svg") center / 100% 100% no-repeat,
       linear-gradient(#000, #000) left / 0% 100% no-repeat; /* mask color doesn't matter */
@@ -80,7 +80,7 @@ const { links, email } = Astro.props;
   }
 
   /* use restored class so animation doesn't play on page load */
-  .contact-links-email button.restored::after {
+  .contact-links-email.restored::after {
     animation: copy-fade-in 0.3s ease;
   }
 
@@ -101,7 +101,7 @@ const { links, email } = Astro.props;
 
 <script>
   // Astro includes this script once per page, so it wires up every copy of the component
-  const emails = document.querySelectorAll<HTMLButtonElement>(".contact-links-email button");
+  const emails = document.querySelectorAll<HTMLButtonElement>(".contact-links-email");
 
   for (const email of emails) {
     let timer = 0;

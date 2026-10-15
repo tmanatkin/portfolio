@@ -13,17 +13,17 @@ const { name, description, highlight, repo, website, stack, image } = project.da
 <article class="project">
   {/* heading and description already cover image alt text */}
   <Image src={image} alt="" />
-  <div class="project-info">
-    <div class="project-info-text">
+  <div class="project-body">
+    <div class="project-intro">
       <h2>{name}</h2>
-      <div class="project-info-text-paragraph">
+      <div class="project-summary">
         <p class="project-description">{description}</p>
         <p class="project-highlight">{highlight}</p>
       </div>
     </div>
-    <div class="project-info-details">
-      <ul class="project-stack tag-list" aria-label="Tech stack" role="list">{stack.map((item) => <li>{item}</li>)}</ul>
-      <ul class="project-links icon-links" aria-label="Links" role="list">
+    <div class="project-meta">
+      <ul class="tag-list" aria-label="Tech stack" role="list">{stack.map((item) => <li>{item}</li>)}</ul>
+      <ul class="icon-links" aria-label="Links" role="list">
         <li>
           <a class="icon-link repo-link" href={repo} aria-label={`${name} Repo`}>
             <span>Repo</span>
@@ -60,14 +60,14 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     filter: brightness(0.9); /* tone down bright screenshots */
   }
 
-  .project-info {
+  .project-body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 0.75rem;
   }
 
-  .project-info-text {
+  .project-intro {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -79,7 +79,7 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     line-height: 1.2;
   }
 
-  .project-info-text-paragraph {
+  .project-summary {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -97,7 +97,7 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     color: var(--color-primary-light);
   }
 
-  .project-info-details {
+  .project-meta {
     display: flex;
     flex-direction: column;
     gap: 0.375rem;

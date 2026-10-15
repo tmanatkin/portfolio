@@ -17,12 +17,12 @@ const updatedText = updated.toLocaleDateString("en-US", { month: "short", year: 
 
 <footer class="footer">
   <div class="footer-about">
-    <p class="footer-about-credit">Created by {name}.</p>
+    <p class="footer-credit">Created by {name}.</p>
     <ContactLinks links={links} email={email} />
   </div>
   <p class="footer-source">
-    <span class="footer-source-updated">Updated <time datetime={updated.toISOString()}>{updatedText}</time></span>
-    <a class="footer-source-repo icon-link repo-link" href={repo} aria-label="Portfolio Repo"><span>Repo</span></a>
+    <span>Updated <time datetime={updated.toISOString()}>{updatedText}</time></span>
+    <a class="icon-link repo-link" href={repo} aria-label="Portfolio Repo"><span>Repo</span></a>
   </p>
 </footer>
 
@@ -39,7 +39,7 @@ const updatedText = updated.toLocaleDateString("en-US", { month: "short", year: 
     gap: 0.75rem;
   }
 
-  .footer-about-credit {
+  .footer-credit {
     font-size: 1.5rem;
     font-weight: 600;
     line-height: 1.2;
