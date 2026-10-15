@@ -13,7 +13,7 @@ const { links, email } = Astro.props;
   {
     links.map((link) => (
       <li>
-        <a href={link.data.url} style={`--icon: url("${link.data.icon.src}")`}>
+        <a class="icon-link" href={link.data.url} style={`--icon: url("${link.data.icon.src}")`}>
           <span>{link.data.label}</span>
         </a>
       </li>
