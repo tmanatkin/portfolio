@@ -24,6 +24,15 @@
     --arc-item-width: min(80%, 55rem);
     --arc-item-gap: 15vh;
     --arc-half-view: 50vh;
+    --arc-focus-length: 40vh; /* distance from mid-screen where items are fully faded */
+    --arc-unfocused-opacity: 0.3;
+  }
+
+  /* set per item by the script, 1 at mid-screen down to 0 at the focus length */
+  @property --arc-focus {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 1;
   }
 
   /* arc scroll is fixed to viewport, JS moves items with transform */
@@ -80,6 +89,7 @@
 
   .arc-scroll.enabled .arc-scroll-items :global(.arc-scroll-item) {
     will-change: transform;
+    opacity: calc(var(--arc-unfocused-opacity) + (1 - var(--arc-unfocused-opacity)) * var(--arc-focus));
   }
 
   /* gives the page scroll height and snap points */
@@ -165,6 +175,7 @@
   const scrollItemCenters: number[] = [];
   let arcRadius = 0;
   let arcLength = 0;
+  let focusLength = 0;
   let scrolling = false;
 
   const supportsScrollEnd = "onscrollend" in window;
@@ -193,6 +204,8 @@
     container.appendChild(temp);
     arcRadius = temp.offsetWidth;
     arcLength = temp.offsetHeight;
+    temp.style.width = "var(--arc-focus-length)";
+    focusLength = temp.offsetWidth;
     temp.remove();
 
     // first and last item half heights for the padding that centers them at the scroll edges
@@ -276,8 +289,13 @@
     const middleY = window.scrollY + window.innerHeight / 2;
 
     for (let i = 0; i < scrollItems.length; i++) {
-      // items past the arc length stay at the end of the arc
       let distanceFromMiddle = scrollItemCenters[i] - middleY;
+
+      // CSS fades the item by how close it is to mid-screen
+      const focus = Math.max(0, 1 - Math.abs(distanceFromMiddle) / focusLength);
+      scrollItems[i].style.setProperty("--arc-focus", `${focus}`);
+
+      // items past the arc length stay at the end of the arc
       distanceFromMiddle = Math.max(-arcLength, Math.min(arcLength, distanceFromMiddle));
 
       // distance along the arc converted to an angle in radians
