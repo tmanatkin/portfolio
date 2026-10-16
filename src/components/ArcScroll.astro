@@ -1,5 +1,6 @@
 <div class="arc-scroll">
   <div class="arc-scroll-line">
+    <div class="arc-scroll-ticks"></div>
     <svg class="arc-scroll-line-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <circle cx="50" cy="50" r="50" vector-effect="non-scaling-stroke"></circle>
     </svg>
@@ -117,7 +118,37 @@
     overflow: visible; /* prevent stroke from being clipped */
     fill: none;
     stroke: var(--color-primary);
-    stroke-width: 5px;
+    stroke-width: 3px;
+  }
+
+  /* sits at the arc center so the script can turn every tick at once */
+  .arc-scroll-ticks {
+    position: absolute;
+    top: 0;
+    left: calc((100% - var(--arc-item-width)) / 2 - var(--arc-radius));
+  }
+
+  .arc-scroll.enabled .arc-scroll-ticks {
+    will-change: transform;
+  }
+
+  /* placed by the script with a rotate and translate out from the arc center */
+  .arc-scroll-ticks :global(.arc-scroll-tick) {
+    --tick-width: 1.5px;
+    --tick-length: 8px;
+    position: absolute;
+    top: calc(var(--tick-width) / -2); /* centers the tick on its angle */
+    width: var(--tick-length);
+    height: var(--tick-width);
+    transform-origin: 0 50%;
+    background-color: color-mix(in srgb, var(--color-text-muted) 45%, transparent);
+  }
+
+  .arc-scroll-ticks :global(.arc-scroll-tick.major) {
+    --tick-width: 2px;
+    --tick-length: 15px;
+    width: var(--tick-length);
+    background-color: var(--color-primary-light);
   }
 </style>
 
@@ -125,6 +156,10 @@
   const container = document.querySelector<HTMLElement>(".arc-scroll");
   const items = document.querySelector<HTMLElement>(".arc-scroll-items");
   const spacer = document.querySelector<HTMLElement>(".arc-scroll-spacer");
+  const lineSvg = document.querySelector<SVGSVGElement>(".arc-scroll-line-svg");
+  const ticks = document.querySelector<HTMLElement>(".arc-scroll-ticks");
+
+  const ticksBetween = 5; // small ticks between each pair of project cards
 
   const scrollItems: HTMLElement[] = [];
   const scrollItemCenters: number[] = [];
@@ -137,8 +172,8 @@
   // measure arc and scroll items
   // build spacer height and snap points from them
   function measureScrollItems() {
-    if (container === null || items === null || spacer === null) {
-      throw new Error("ArcScroll: container, items, or spacer not found");
+    if (container === null || items === null || spacer === null || lineSvg === null || ticks === null) {
+      throw new Error("ArcScroll: container, items, spacer, line, or ticks not found");
     }
 
     // enable arc in CSS
@@ -180,6 +215,60 @@
       point.style.top = `${center - 1}px`; // half the point height
       spacer.appendChild(point);
     }
+
+    // ticks share the same radius as arc line
+    const tickRadius = lineSvg.getBoundingClientRect().width / 2;
+
+    // most gaps are between project cards, so the middle gap is the card spacing
+    const gaps: number[] = [];
+    for (let i = 1; i < scrollItemCenters.length; i++) {
+      gaps.push(scrollItemCenters[i] - scrollItemCenters[i - 1]);
+    }
+    gaps.sort((a, b) => a - b);
+    const tickSpacing = gaps[Math.floor(gaps.length / 2)] / (ticksBetween + 1);
+
+    // header and footer amount of small ticks are rounded to get the closest spacing to project gaps
+    const smallTickCenters: number[] = [];
+    for (let i = 1; i < scrollItemCenters.length; i++) {
+      const gap = scrollItemCenters[i] - scrollItemCenters[i - 1];
+      const intervals = Math.max(1, Math.round(gap / tickSpacing));
+      for (let j = 1; j < intervals; j++) {
+        smallTickCenters.push(scrollItemCenters[i - 1] + (j * gap) / intervals);
+      }
+    }
+
+    // major ticks at each snap point
+    const majorTickCenters = [...scrollItemCenters];
+
+    // continue ticks past the first and last snap points
+    // major ticks past first and last snap points match card spacing
+    const firstCenter = scrollItemCenters[0];
+    const lastCenter = scrollItemCenters[scrollItemCenters.length - 1];
+    const endDistance = window.innerHeight / 2 + tickSpacing;
+    for (let step = 1; step * tickSpacing <= endDistance; step++) {
+      const distance = step * tickSpacing;
+      if (step % (ticksBetween + 1) === 0) {
+        majorTickCenters.push(firstCenter - distance);
+        majorTickCenters.push(lastCenter + distance);
+      } else {
+        smallTickCenters.push(firstCenter - distance);
+        smallTickCenters.push(lastCenter + distance);
+      }
+    }
+
+    // major ticks first, then the small ticks
+    const tickCenters = [...majorTickCenters, ...smallTickCenters];
+    ticks.replaceChildren();
+    for (let i = 0; i < tickCenters.length; i++) {
+      // angle the tick has at scroll 0, the whole group turns with the scroll after that
+      const angle = (tickCenters[i] - window.innerHeight / 2) / arcRadius;
+
+      const tick = document.createElement("div");
+      tick.className = i < majorTickCenters.length ? "arc-scroll-tick major" : "arc-scroll-tick";
+      // -100% pulls the tick back by its own length so every tick ends at the same radius
+      tick.style.transform = `rotate(${angle}rad) translateX(${tickRadius}px) translateX(-100%)`;
+      ticks.appendChild(tick);
+    }
   }
 
   // move each scroll item along the arc
@@ -196,6 +285,11 @@
 
       // -scrollY scrolls item because container is fixed
       scrollItems[i].style.transform = `translateY(${-window.scrollY - distanceFromMiddle}px) rotate(${angle}rad)`;
+    }
+
+    // turn the ticks the same angle the scroll turns the items
+    if (ticks !== null) {
+      ticks.style.transform = `rotate(${-window.scrollY / arcRadius}rad)`;
     }
   }
 
