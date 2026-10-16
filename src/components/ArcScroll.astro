@@ -24,11 +24,11 @@
     --arc-item-width: min(80%, 55rem);
     --arc-item-gap: 15vh;
     --arc-half-view: 50vh;
-    --arc-focus-length: 40vh; /* distance from mid-screen where items are fully faded */
+    --arc-fade-length: 40vh; /* distance from mid-screen where items are fully faded */
     --arc-unfocused-opacity: 0.3;
   }
 
-  /* set per item by the script, 1 at mid-screen down to 0 at the focus length */
+  /* set per item by the script, 1 at mid-screen down to 0 at the fade length */
   @property --arc-focus {
     syntax: "<number>";
     inherits: false;
@@ -109,6 +109,8 @@
   .arc-scroll-line {
     --arc-line-gap: calc(var(--arc-item-width) / 16); /* 5vw when items are 80% wide, stops with item max width */
     --arc-line-radius: calc(var(--arc-radius) - var(--arc-line-gap));
+    --arc-line-focus-length: 15vh; /* distance from mid-screen the arc line stays at full opacity */
+    --arc-line-fade-length: 45vh; /* distance from mid-screen where the arc line reaches unfocused opacity */
     position: sticky; /* keeps the line at mid-screen on the flat page */
     top: 50%;
     height: 0;
@@ -116,12 +118,20 @@
 
   .arc-scroll.enabled .arc-scroll-line {
     position: absolute;
-    width: 100%;
+    /* fills the screen so the mask spans the whole visible line */
+    inset: 0;
+    height: auto;
+    mask-image: linear-gradient(
+      rgb(0 0 0 / var(--arc-unfocused-opacity)) calc(50% - var(--arc-line-fade-length)),
+      #000 calc(50% - var(--arc-line-focus-length)),
+      #000 calc(50% + var(--arc-line-focus-length)),
+      rgb(0 0 0 / var(--arc-unfocused-opacity)) calc(50% + var(--arc-line-fade-length))
+    );
   }
 
   .arc-scroll-line-svg {
     position: absolute;
-    top: 0;
+    top: 50%;
     translate: 0 -50%;
     left: calc((100% - var(--arc-item-width)) / 2 - var(--arc-radius) - var(--arc-line-radius));
     width: calc(var(--arc-line-radius) * 2);
@@ -134,7 +144,7 @@
   /* sits at the arc center so the script can turn every tick at once */
   .arc-scroll-ticks {
     position: absolute;
-    top: 0;
+    top: 50%;
     left: calc((100% - var(--arc-item-width)) / 2 - var(--arc-radius));
   }
 
@@ -175,7 +185,7 @@
   const scrollItemCenters: number[] = [];
   let arcRadius = 0;
   let arcLength = 0;
-  let focusLength = 0;
+  let fadeLength = 0;
   let scrolling = false;
 
   const supportsScrollEnd = "onscrollend" in window;
@@ -204,8 +214,8 @@
     container.appendChild(temp);
     arcRadius = temp.offsetWidth;
     arcLength = temp.offsetHeight;
-    temp.style.width = "var(--arc-focus-length)";
-    focusLength = temp.offsetWidth;
+    temp.style.width = "var(--arc-fade-length)";
+    fadeLength = temp.offsetWidth;
     temp.remove();
 
     // first and last item half heights for the padding that centers them at the scroll edges
@@ -292,7 +302,7 @@
       let distanceFromMiddle = scrollItemCenters[i] - middleY;
 
       // CSS fades the item by how close it is to mid-screen
-      const focus = Math.max(0, 1 - Math.abs(distanceFromMiddle) / focusLength);
+      const focus = Math.max(0, 1 - Math.abs(distanceFromMiddle) / fadeLength);
       scrollItems[i].style.setProperty("--arc-focus", `${focus}`);
 
       // items past the arc length stay at the end of the arc
