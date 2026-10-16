@@ -130,6 +130,9 @@
   const scrollItemCenters: number[] = [];
   let arcRadius = 0;
   let arcLength = 0;
+  let scrolling = false;
+
+  const supportsScrollEnd = "onscrollend" in window;
 
   // measure arc and scroll items
   // build spacer height and snap points from them
@@ -217,6 +220,54 @@
     window.scrollTo({ top: scrollItemCenters[index] - window.innerHeight / 2, behavior: "smooth" });
   }
 
+  // step one item per key press
+  function scrollByKey(event: KeyboardEvent) {
+    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) {
+      return;
+    }
+
+    // space presses a focused button instead of scrolling
+    const target = event.target as HTMLElement;
+    if (event.key === " " && target.closest("button") !== null) {
+      return;
+    }
+
+    let step = 0;
+    if (event.key === "ArrowDown" || event.key === "PageDown" || (event.key === " " && !event.shiftKey)) {
+      step = 1;
+    } else if (event.key === "ArrowUp" || event.key === "PageUp" || (event.key === " " && event.shiftKey)) {
+      step = -1;
+    } else {
+      return;
+    }
+    event.preventDefault();
+
+    // key scrolling is not allowed while mouse scrolling
+    if (scrolling) {
+      return;
+    }
+
+    // step from the item closest to mid-screen
+    const middleY = window.scrollY + window.innerHeight / 2;
+    let index = 0;
+    for (let i = 1; i < scrollItemCenters.length; i++) {
+      if (Math.abs(scrollItemCenters[i] - middleY) < Math.abs(scrollItemCenters[index] - middleY)) {
+        index = i;
+      }
+    }
+    index = Math.max(0, Math.min(scrollItemCenters.length - 1, index + step));
+
+    window.scrollTo({ top: scrollItemCenters[index] - window.innerHeight / 2, behavior: "smooth" });
+  }
+
+  function startScrolling() {
+    scrolling = true;
+  }
+
+  function endScrolling() {
+    scrolling = false;
+  }
+
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // reduced motion keeps the flat page
@@ -227,5 +278,10 @@
     window.addEventListener("load", updateScrollItems);
     document.fonts.ready.then(updateScrollItems);
     container?.addEventListener("focusin", scrollToFocus);
+    window.addEventListener("keydown", scrollByKey);
+    if (supportsScrollEnd) {
+      window.addEventListener("scroll", startScrolling, { passive: true });
+      window.addEventListener("scrollend", endScrolling);
+    }
   }
 </script>
