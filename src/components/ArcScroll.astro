@@ -272,12 +272,19 @@
 
   // reduced motion keeps the flat page
   if (!prefersReducedMotion) {
+    // place items along arc and move them on scroll
     updateScrollItems();
     window.addEventListener("scroll", positionScrollItems, { passive: true });
+
+    // remeasure on page changes
     window.addEventListener("resize", updateScrollItems);
     window.addEventListener("load", updateScrollItems);
     document.fonts.ready.then(updateScrollItems);
+
+    // tab scrolls to the focused item
     container?.addEventListener("focusin", scrollToFocus);
+
+    // step scroll using keyboard
     window.addEventListener("keydown", scrollByKey);
     if (supportsScrollEnd) {
       window.addEventListener("scroll", startScrolling, { passive: true });
