@@ -229,10 +229,12 @@
     const itemsTop = items.getBoundingClientRect().top;
     for (const snap of items.querySelectorAll(".arc-scroll-snap")) {
       const rect = snap.getBoundingClientRect();
-      const center = rect.top - itemsTop + rect.height / 2;
       scrollItems.push(snap.firstElementChild as HTMLElement);
-      scrollItemCenters.push(center);
+      scrollItemCenters.push(rect.top - itemsTop + rect.height / 2);
+    }
 
+    // snap points added after measuring to help with layout shifts
+    for (const center of scrollItemCenters) {
       const point = document.createElement("div");
       point.className = "arc-scroll-snap-point";
       point.style.top = `${center - 1}px`; // half the point height
@@ -400,8 +402,12 @@
 
     // remeasure on page changes
     window.addEventListener("resize", updateScrollItems);
-    window.addEventListener("load", updateScrollItems);
-    document.fonts.ready.then(updateScrollItems);
+
+    // remeasure when item sizes change after loading
+    const itemResizeObserver = new ResizeObserver(updateScrollItems);
+    for (const element of document.querySelectorAll(".arc-scroll-items, .arc-scroll-snap")) {
+      itemResizeObserver.observe(element);
+    }
 
     // tab scrolls to the focused item
     container?.addEventListener("focusin", scrollToFocus);
