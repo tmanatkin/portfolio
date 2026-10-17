@@ -28,6 +28,13 @@
     --arc-unfocused-opacity: 0.3;
   }
 
+  /* stacked project cards breakpoint */
+  @media (width < 78rem) {
+    .arc-scroll {
+      --arc-item-width: min(80%, 35rem);
+    }
+  }
+
   /* set per item by the script, 1 at mid-screen down to 0 at the fade length */
   @property --arc-focus {
     syntax: "<number>";

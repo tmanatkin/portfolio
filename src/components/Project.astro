@@ -103,4 +103,15 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     flex-direction: column;
     gap: 0.375rem;
   }
+
+  /* stacked project cards breakpoint */
+  @media (width < 78rem) {
+    .project {
+      flex-direction: column;
+    }
+
+    .project img {
+      width: 100%;
+    }
+  }
 </style>
