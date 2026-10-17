@@ -21,7 +21,10 @@
     --arc-radius: 200vh;
     --arc-angle: 0.75; /* angle arc is limited to on each side of the center */
     --arc-length: calc(var(--arc-radius) * var(--arc-angle));
-    --arc-item-width: min(80%, 55rem);
+    --arc-line-gap: min(5vw, 3.5rem); /* space on both sides of the arc line */
+    --arc-visible-width: 0px; /* set by JS, visible on screen arc width */
+    --arc-side-space: calc(var(--arc-line-gap) + var(--arc-visible-width) + var(--arc-line-gap));
+    --arc-item-width: min(100% - 2 * var(--arc-side-space), 55rem);
     --arc-item-gap: 15vh;
     --arc-half-view: 50vh;
     --arc-fade-length: 40vh; /* distance from mid-screen where items are fully faded */
@@ -31,7 +34,8 @@
   /* stacked project cards breakpoint */
   @media (width < 78rem) {
     .arc-scroll {
-      --arc-item-width: min(80%, 35rem);
+      --arc-line-gap: min(5vw, 2rem);
+      --arc-item-width: min(100% - 2 * var(--arc-side-space), 35rem);
     }
   }
 
@@ -114,7 +118,6 @@
   }
 
   .arc-scroll-line {
-    --arc-line-gap: calc(var(--arc-item-width) / 16); /* 5vw when items are 80% wide, stops with item max width */
     --arc-line-radius: calc(var(--arc-radius) - var(--arc-line-gap));
     --arc-line-focus-length: 15vh; /* distance from mid-screen the arc line stays at full opacity */
     --arc-line-fade-length: 45vh; /* distance from mid-screen where the arc line reaches unfocused opacity */
@@ -224,6 +227,11 @@
     temp.style.width = "var(--arc-fade-length)";
     fadeLength = temp.offsetWidth;
     temp.remove();
+
+    const lineRadius = lineSvg.getBoundingClientRect().width / 2;
+    const halfView = window.innerHeight / 2;
+    const edgeBend = lineRadius - Math.sqrt(lineRadius * lineRadius - halfView * halfView);
+    container.style.setProperty("--arc-visible-width", `${edgeBend}px`);
 
     // first and last item half heights for the padding that centers them at the scroll edges
     const first = items.firstElementChild as HTMLElement;
