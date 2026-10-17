@@ -248,9 +248,6 @@
       spacer.appendChild(point);
     }
 
-    // ticks share the same radius as arc line
-    const tickRadius = lineSvg.getBoundingClientRect().width / 2;
-
     // most gaps are between project cards, so the middle gap is the card spacing
     const gaps: number[] = [];
     for (let i = 1; i < scrollItemCenters.length; i++) {
@@ -298,7 +295,7 @@
       const tick = document.createElement("div");
       tick.className = i < majorTickCenters.length ? "arc-scroll-tick major" : "arc-scroll-tick";
       // -100% pulls the tick back by its own length so every tick ends at the same radius
-      tick.style.transform = `rotate(${angle}rad) translateX(${tickRadius}px) translateX(-100%)`;
+      tick.style.transform = `rotate(${angle}rad) translateX(${lineRadius}px) translateX(-100%)`;
       ticks.appendChild(tick);
     }
   }
