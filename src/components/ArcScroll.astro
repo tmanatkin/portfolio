@@ -18,12 +18,14 @@
   }
 
   .arc-scroll {
-    --arc-radius: 200vh;
+    --arc-min-radius: 200vh; /* keeps short wide screen arc from curving too much */
+    --arc-max-height: 60rem; /* keeps tall screen arc from going too flat */
+    --arc-radius: var(--arc-min-radius); /* set by JS from the bend */
     --arc-angle: 0.75; /* angle arc is limited to on each side of the center */
     --arc-length: calc(var(--arc-radius) * var(--arc-angle));
     --arc-line-gap: min(5vw, 3.5rem); /* space on both sides of the arc line */
-    --arc-visible-width: 0px; /* set by JS, visible on screen arc width */
-    --arc-side-space: calc(var(--arc-line-gap) + var(--arc-visible-width) + var(--arc-line-gap));
+    --arc-bend: var(--arc-line-gap); /* how far the arc curves in from the screen corners to mid-screen */
+    --arc-side-space: calc(var(--arc-line-gap) + var(--arc-bend) + var(--arc-line-gap));
     --arc-item-width: min(100% - 2 * var(--arc-side-space), 55rem);
     --arc-item-gap: 15vh;
     --arc-half-view: 50vh;
@@ -219,19 +221,32 @@
     const temp = document.createElement("div");
     temp.style.position = "absolute";
     temp.style.visibility = "hidden";
-    temp.style.width = "var(--arc-radius)";
-    temp.style.height = "var(--arc-length)";
     container.appendChild(temp);
-    arcRadius = temp.offsetWidth;
+    temp.style.width = "var(--arc-line-gap)";
+    const lineGap = temp.offsetWidth;
+    temp.style.width = "var(--arc-bend)";
+    const bend = temp.offsetWidth;
+    temp.style.width = "var(--arc-half-view)";
+    const halfView = temp.offsetWidth;
+    temp.style.width = "var(--arc-max-height)";
+    const maxHeight = temp.offsetWidth;
+    temp.style.width = "var(--arc-min-radius)";
+    const minRadius = temp.offsetWidth;
+
+    // arc line circles through mid-screen and screen corners, capped by max height
+    const anchorY = Math.min(halfView, maxHeight / 2);
+    const anchorRadius = (anchorY * anchorY + bend * bend) / (2 * bend);
+    arcRadius = Math.max(minRadius, anchorRadius + lineGap);
+    container.style.setProperty("--arc-radius", `${arcRadius}px`);
+
+    // arc length depends on the radius set above
+    temp.style.height = "var(--arc-length)";
     arcLength = temp.offsetHeight;
     temp.style.width = "var(--arc-fade-length)";
     fadeLength = temp.offsetWidth;
     temp.remove();
 
     const lineRadius = lineSvg.getBoundingClientRect().width / 2;
-    const halfView = window.innerHeight / 2;
-    const edgeBend = lineRadius - Math.sqrt(lineRadius * lineRadius - halfView * halfView);
-    container.style.setProperty("--arc-visible-width", `${edgeBend}px`);
 
     // first and last item half heights for the padding that centers them at the scroll edges
     const first = items.firstElementChild as HTMLElement;
