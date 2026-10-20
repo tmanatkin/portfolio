@@ -50,9 +50,13 @@
   }
 
   /* arc scroll is fixed to viewport, JS moves items with transform */
+  /* lvh so mobile toolbars showing and hiding don't resize it */
   .arc-scroll.enabled {
     position: fixed;
-    inset: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 100lvh;
   }
 
   .arc-scroll-items {
@@ -198,6 +202,7 @@
   const ticks = document.querySelector<HTMLElement>(".arc-scroll-ticks");
 
   const ticksBetween = 5; // small ticks between each pair of project cards
+  const settleFrames = 10; // frames without a scroll change before the position loop stops
 
   const scrollItems: HTMLElement[] = [];
   const scrollItemCenters: number[] = [];
@@ -206,6 +211,9 @@
   let middle = 0;
   let fadeLength = 0;
   let scrolling = false;
+  let lastScrollY = -1;
+  let stillFrames = 0;
+  let frameQueued = false;
 
   const supportsScrollEnd = "onscrollend" in window;
 
@@ -362,6 +370,33 @@
     }
   }
 
+  // reposition every frame the scroll changes, iOS skips scroll events for some scroll changes
+  function positionOnFrame() {
+    const scrollY = window.scrollY;
+    if (scrollY !== lastScrollY) {
+      lastScrollY = scrollY;
+      stillFrames = 0;
+      positionScrollItems();
+    } else {
+      stillFrames++;
+    }
+
+    // stop once scrolling settles, the next scroll event starts it again
+    if (stillFrames < settleFrames) {
+      requestAnimationFrame(positionOnFrame);
+    } else {
+      frameQueued = false;
+    }
+  }
+
+  function startPositioning() {
+    stillFrames = 0;
+    if (!frameQueued) {
+      frameQueued = true;
+      requestAnimationFrame(positionOnFrame);
+    }
+  }
+
   // re-measure and reposition scroll items
   function updateScrollItems() {
     measureScrollItems();
@@ -437,7 +472,7 @@
   if (!prefersReducedMotion) {
     // place items along arc and move them on scroll
     updateScrollItems();
-    window.addEventListener("scroll", positionScrollItems, { passive: true });
+    window.addEventListener("scroll", startPositioning, { passive: true });
 
     // remeasure when item sizes change
     const itemResizeObserver = new ResizeObserver(updateScrollItems);
