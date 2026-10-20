@@ -253,6 +253,8 @@
     arcLength = temp.offsetHeight;
     temp.style.width = "var(--arc-fade-length)";
     fadeLength = temp.offsetWidth;
+    temp.style.width = "100lvh"; // lvh so ticks still reach the screen edges when mobile toolbars hide
+    const largeView = temp.offsetWidth;
     temp.remove();
 
     const lineRadius = lineSvg.getBoundingClientRect().width / 2;
@@ -305,7 +307,7 @@
     // major ticks past first and last snap points match card spacing
     const firstCenter = scrollItemCenters[0];
     const lastCenter = scrollItemCenters[scrollItemCenters.length - 1];
-    const endDistance = Math.max(middle, window.innerHeight - middle) + tickSpacing;
+    const endDistance = Math.max(middle, largeView - middle) + tickSpacing;
     for (let step = 1; step * tickSpacing <= endDistance; step++) {
       const distance = step * tickSpacing;
       if (step % (ticksBetween + 1) === 0) {
@@ -437,10 +439,7 @@
     updateScrollItems();
     window.addEventListener("scroll", positionScrollItems, { passive: true });
 
-    // remeasure on page changes
-    window.addEventListener("resize", updateScrollItems);
-
-    // remeasure when item sizes change after loading
+    // remeasure when item sizes change
     const itemResizeObserver = new ResizeObserver(updateScrollItems);
     for (const element of document.querySelectorAll(".arc-scroll-items, .arc-scroll-snap")) {
       itemResizeObserver.observe(element);
