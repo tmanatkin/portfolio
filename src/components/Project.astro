@@ -12,7 +12,7 @@ const { name, description, highlight, repo, website, stack, image } = project.da
 
 <article class="project">
   {/* heading and description already cover image alt text */}
-  <Image src={image} alt="" />
+  <Image src={image} alt="" loading="eager" />
   <div class="project-body">
     <div class="project-intro">
       <h2>{name}</h2>
