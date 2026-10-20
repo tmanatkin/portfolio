@@ -1,18 +1,34 @@
 <div class="arc-scroll">
-  <div class="arc-scroll-line">
-    <div class="arc-scroll-ticks"></div>
-    <svg class="arc-scroll-line-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="50" cy="50" r="50" vector-effect="non-scaling-stroke"></circle>
-    </svg>
+  <div class="arc-scroll-view">
+    <div class="arc-scroll-line">
+      <div class="arc-scroll-ticks"></div>
+      <svg class="arc-scroll-line-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="50" cy="50" r="50" vector-effect="non-scaling-stroke"></circle>
+      </svg>
+    </div>
+    <div class="arc-scroll-items">
+      <slot />
+    </div>
   </div>
-  <div class="arc-scroll-items">
-    <slot />
-  </div>
+  <div class="arc-scroll-spacer"></div>
 </div>
-<div class="arc-scroll-spacer"></div>
 
 <style>
   :global(html) {
+    scroll-snap-type: y mandatory;
+    overscroll-behavior-y: none;
+  }
+
+  /* arc scroll is the scroller instead of the page */
+  :global(html:has(.arc-scroll.enabled)) {
+    overflow: hidden;
+  }
+
+  .arc-scroll.enabled {
+    position: fixed;
+    inset: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
     scroll-snap-type: y mandatory;
     overscroll-behavior-y: none;
   }
@@ -49,14 +65,12 @@
     initial-value: 1;
   }
 
-  /* arc scroll is fixed to viewport, JS moves items with transform */
-  /* lvh so mobile toolbars showing and hiding don't resize it */
-  .arc-scroll.enabled {
-    position: fixed;
+  /* view sticks to the top of the arc scroll, JS moves items with transform */
+  .arc-scroll.enabled .arc-scroll-view {
+    position: sticky;
     top: 0;
-    right: 0;
-    left: 0;
-    height: 100lvh;
+    height: 100%;
+    overflow: clip;
   }
 
   .arc-scroll-items {
@@ -110,7 +124,7 @@
     opacity: calc(var(--arc-unfocused-opacity) + (1 - var(--arc-unfocused-opacity)) * var(--arc-focus));
   }
 
-  /* gives the page scroll height and snap points */
+  /* gives the arc scroll its scroll height and snap points */
   .arc-scroll-spacer {
     position: relative;
     pointer-events: none;
@@ -195,7 +209,8 @@
 </style>
 
 <script>
-  const container = document.querySelector<HTMLElement>(".arc-scroll");
+  const scroller = document.querySelector<HTMLElement>(".arc-scroll");
+  const view = document.querySelector<HTMLElement>(".arc-scroll-view");
   const items = document.querySelector<HTMLElement>(".arc-scroll-items");
   const spacer = document.querySelector<HTMLElement>(".arc-scroll-spacer");
   const lineSvg = document.querySelector<SVGSVGElement>(".arc-scroll-line-svg");
@@ -214,18 +229,41 @@
   let lastScrollY = -1;
   let stillFrames = 0;
   let frameQueued = false;
+  let tabScrollTop: number | null = null; // scroll position when tab was pressed, before the browser's focus jump
 
   const supportsScrollEnd = "onscrollend" in window;
+
+  // arc scroll scrolls instead of the page
+  function getScrollTop() {
+    if (scroller === null) {
+      return 0;
+    }
+    return scroller.scrollTop;
+  }
+
+  function setScrollTop(top: number, behavior: ScrollBehavior) {
+    if (scroller === null) {
+      return;
+    }
+    scroller.scrollTo({ top: top, behavior: behavior });
+  }
 
   // measure arc and scroll items
   // build spacer height and snap points from them
   function measureScrollItems() {
-    if (container === null || items === null || spacer === null || lineSvg === null || ticks === null) {
-      throw new Error("ArcScroll: container, items, spacer, line, or ticks not found");
+    if (
+      scroller === null ||
+      view === null ||
+      items === null ||
+      spacer === null ||
+      lineSvg === null ||
+      ticks === null
+    ) {
+      throw new Error("ArcScroll: HTML element not found");
     }
 
     // enable arc in CSS
-    container.classList.add("enabled");
+    scroller.classList.add("enabled");
 
     // clear previous measurements so re-measuring doesn't add duplicates
     scrollItems.length = 0;
@@ -236,7 +274,7 @@
     const temp = document.createElement("div");
     temp.style.position = "absolute";
     temp.style.visibility = "hidden";
-    container.appendChild(temp);
+    view.appendChild(temp);
     temp.style.width = "var(--arc-line-gap)";
     const lineGap = temp.offsetWidth;
     temp.style.width = "var(--arc-bend)";
@@ -254,7 +292,7 @@
     const anchorY = Math.min(halfView, maxHeight / 2);
     const anchorRadius = (anchorY * anchorY + bend * bend) / (2 * bend);
     arcRadius = Math.max(minRadius, anchorRadius + lineGap);
-    container.style.setProperty("--arc-radius", `${arcRadius}px`);
+    scroller.style.setProperty("--arc-radius", `${arcRadius}px`);
 
     // arc length depends on the radius set above
     temp.style.height = "var(--arc-length)";
@@ -274,6 +312,7 @@
     items.style.setProperty("--arc-last-half-height", `${last.getBoundingClientRect().height / 2}px`);
 
     spacer.style.height = `${items.offsetHeight}px`;
+    spacer.style.marginTop = `${-view.offsetHeight}px`;
 
     const itemsTop = items.getBoundingClientRect().top;
     for (const snap of items.querySelectorAll(".arc-scroll-snap")) {
@@ -344,7 +383,7 @@
 
   // move each scroll item along the arc
   function positionScrollItems() {
-    const scrollY = window.scrollY;
+    const scrollY = getScrollTop();
     const middleY = scrollY + middle;
 
     for (let i = 0; i < scrollItems.length; i++) {
@@ -360,7 +399,7 @@
       // distance along the arc converted to an angle in radians
       const angle = distanceFromMiddle / arcRadius;
 
-      // -scrollY scrolls item because container is fixed
+      // -scrollY scrolls item because view is sticky
       scrollItems[i].style.transform = `translateY(${-scrollY - distanceFromMiddle}px) rotate(${angle}rad)`;
     }
 
@@ -372,7 +411,7 @@
 
   // reposition every frame the scroll changes, iOS skips scroll events for some scroll changes
   function positionOnFrame() {
-    const scrollY = window.scrollY;
+    const scrollY = getScrollTop();
     if (scrollY !== lastScrollY) {
       lastScrollY = scrollY;
       stillFrames = 0;
@@ -403,8 +442,18 @@
     positionScrollItems();
   }
 
-  // scroll page to keyboard focused element
+  function rememberTabScroll(event: KeyboardEvent) {
+    if (event.key === "Tab") {
+      tabScrollTop = getScrollTop();
+    }
+  }
+
+  // scroll to keyboard focused element
   function scrollToFocus(event: FocusEvent) {
+    // cleared on every focus so a later focus without tab doesn't use an old position
+    const startTop = tabScrollTop;
+    tabScrollTop = null;
+
     const target = event.target as HTMLElement;
     if (!target.matches(":focus-visible")) {
       return;
@@ -415,10 +464,14 @@
       return;
     }
 
-    window.scrollTo({ top: scrollItemCenters[index] - middle, behavior: "smooth" });
+    // undo the browser's focus jump before it paints so the smooth scroll starts where the page was
+    if (startTop !== null) {
+      setScrollTop(startTop, "instant");
+    }
+    setScrollTop(scrollItemCenters[index] - middle, "smooth");
   }
 
-  // step one item per key press
+  // step one item per key press, home and end jump to the first and last item
   function scrollByKey(event: KeyboardEvent) {
     if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) {
       return;
@@ -435,6 +488,10 @@
       step = 1;
     } else if (event.key === "ArrowUp" || event.key === "PageUp" || (event.key === " " && event.shiftKey)) {
       step = -1;
+    } else if (event.key === "Home") {
+      step = -scrollItemCenters.length; // clamped to the first item below
+    } else if (event.key === "End") {
+      step = scrollItemCenters.length; // clamped to the last item below
     } else {
       return;
     }
@@ -446,7 +503,7 @@
     }
 
     // step from the item closest to mid-screen
-    const middleY = window.scrollY + middle;
+    const middleY = getScrollTop() + middle;
     let index = 0;
     for (let i = 1; i < scrollItemCenters.length; i++) {
       if (Math.abs(scrollItemCenters[i] - middleY) < Math.abs(scrollItemCenters[index] - middleY)) {
@@ -455,7 +512,7 @@
     }
     index = Math.max(0, Math.min(scrollItemCenters.length - 1, index + step));
 
-    window.scrollTo({ top: scrollItemCenters[index] - middle, behavior: "smooth" });
+    setScrollTop(scrollItemCenters[index] - middle, "smooth");
   }
 
   function startScrolling() {
@@ -472,22 +529,23 @@
   if (!prefersReducedMotion) {
     // place items along arc and move them on scroll
     updateScrollItems();
-    window.addEventListener("scroll", startPositioning, { passive: true });
+    scroller?.addEventListener("scroll", startPositioning, { passive: true });
 
-    // remeasure when item sizes change
+    // remeasure when item or view sizes change
     const itemResizeObserver = new ResizeObserver(updateScrollItems);
-    for (const element of document.querySelectorAll(".arc-scroll-items, .arc-scroll-snap")) {
+    for (const element of document.querySelectorAll(".arc-scroll-view, .arc-scroll-items, .arc-scroll-snap")) {
       itemResizeObserver.observe(element);
     }
 
     // tab scrolls to the focused item
-    container?.addEventListener("focusin", scrollToFocus);
+    window.addEventListener("keydown", rememberTabScroll);
+    view?.addEventListener("focusin", scrollToFocus);
 
     // step scroll using keyboard
     window.addEventListener("keydown", scrollByKey);
     if (supportsScrollEnd) {
-      window.addEventListener("scroll", startScrolling, { passive: true });
-      window.addEventListener("scrollend", endScrolling);
+      scroller?.addEventListener("scroll", startScrolling, { passive: true });
+      scroller?.addEventListener("scrollend", endScrolling);
     }
   }
 </script>
