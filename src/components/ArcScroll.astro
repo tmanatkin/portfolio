@@ -334,7 +334,8 @@
 
   // move each scroll item along the arc
   function positionScrollItems() {
-    const middleY = window.scrollY + middle;
+    const scrollY = window.scrollY;
+    const middleY = scrollY + middle;
 
     for (let i = 0; i < scrollItems.length; i++) {
       let distanceFromMiddle = scrollItemCenters[i] - middleY;
@@ -350,12 +351,12 @@
       const angle = distanceFromMiddle / arcRadius;
 
       // -scrollY scrolls item because container is fixed
-      scrollItems[i].style.transform = `translateY(${-window.scrollY - distanceFromMiddle}px) rotate(${angle}rad)`;
+      scrollItems[i].style.transform = `translateY(${-scrollY - distanceFromMiddle}px) rotate(${angle}rad)`;
     }
 
     // turn the ticks the same angle the scroll turns the items
     if (ticks !== null) {
-      ticks.style.transform = `rotate(${-window.scrollY / arcRadius}rad)`;
+      ticks.style.transform = `rotate(${-scrollY / arcRadius}rad)`;
     }
   }
 
