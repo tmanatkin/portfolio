@@ -45,7 +45,7 @@
     --arc-item-width: min(100% - 2 * var(--arc-side-space), 55rem);
     --arc-item-gap: 15vh;
     --arc-half-view: 50vh;
-    --arc-middle: 50svh; /* svh so mobile toolbars don't move it */
+    --arc-middle: 50vh;
     --arc-fade-length: 40vh; /* distance from mid-screen where items are fully faded */
     --arc-unfocused-opacity: 0.3;
   }
@@ -93,7 +93,7 @@
   /* padding set from the first and last item heights by the script, translating them left an extra half height gap */
   .arc-scroll.enabled .arc-scroll-items {
     padding-block: calc(var(--arc-middle) - var(--arc-first-half-height))
-      calc(100lvh - var(--arc-middle) - var(--arc-last-half-height));
+      calc(var(--arc-middle) - var(--arc-last-half-height));
   }
   .arc-scroll.enabled .arc-scroll-items > :global(.arc-scroll-snap:first-child) {
     translate: none;
@@ -217,7 +217,6 @@
   const ticks = document.querySelector<HTMLElement>(".arc-scroll-ticks");
 
   const ticksBetween = 5; // small ticks between each pair of project cards
-  const settleFrames = 10; // frames without a scroll change before the position loop stops
 
   const scrollItems: HTMLElement[] = [];
   const scrollItemCenters: number[] = [];
@@ -226,9 +225,6 @@
   let middle = 0;
   let fadeLength = 0;
   let scrolling = false;
-  let lastScrollY = -1;
-  let stillFrames = 0;
-  let frameQueued = false;
   let tabScrollTop: number | null = null; // scroll position when tab was pressed, before the browser's focus jump
 
   const supportsScrollEnd = "onscrollend" in window;
@@ -251,14 +247,7 @@
   // measure arc and scroll items
   // build spacer height and snap points from them
   function measureScrollItems() {
-    if (
-      scroller === null ||
-      view === null ||
-      items === null ||
-      spacer === null ||
-      lineSvg === null ||
-      ticks === null
-    ) {
+    if (scroller === null || view === null || items === null || spacer === null || lineSvg === null || ticks === null) {
       throw new Error("ArcScroll: HTML element not found");
     }
 
@@ -285,8 +274,10 @@
     const maxHeight = temp.offsetWidth;
     temp.style.width = "var(--arc-min-radius)";
     const minRadius = temp.offsetWidth;
-    temp.style.width = "var(--arc-middle)";
-    middle = temp.getBoundingClientRect().width;
+
+    // view fills the arc scroll, so half its height is the visible middle
+    middle = view.getBoundingClientRect().height / 2;
+    scroller.style.setProperty("--arc-middle", `${middle}px`);
 
     // arc line circles through mid-screen and screen corners, capped by max height
     const anchorY = Math.min(halfView, maxHeight / 2);
@@ -299,8 +290,6 @@
     arcLength = temp.offsetHeight;
     temp.style.width = "var(--arc-fade-length)";
     fadeLength = temp.offsetWidth;
-    temp.style.width = "100lvh"; // lvh so ticks still reach the screen edges when mobile toolbars hide
-    const largeView = temp.offsetWidth;
     temp.remove();
 
     const lineRadius = lineSvg.getBoundingClientRect().width / 2;
@@ -354,7 +343,7 @@
     // major ticks past first and last snap points match card spacing
     const firstCenter = scrollItemCenters[0];
     const lastCenter = scrollItemCenters[scrollItemCenters.length - 1];
-    const endDistance = Math.max(middle, largeView - middle) + tickSpacing;
+    const endDistance = middle + tickSpacing; // middle to the screen edge, plus one tick past it
     for (let step = 1; step * tickSpacing <= endDistance; step++) {
       const distance = step * tickSpacing;
       if (step % (ticksBetween + 1) === 0) {
@@ -406,33 +395,6 @@
     // turn the ticks the same angle the scroll turns the items
     if (ticks !== null) {
       ticks.style.transform = `rotate(${-scrollY / arcRadius}rad)`;
-    }
-  }
-
-  // reposition every frame the scroll changes, iOS skips scroll events for some scroll changes
-  function positionOnFrame() {
-    const scrollY = getScrollTop();
-    if (scrollY !== lastScrollY) {
-      lastScrollY = scrollY;
-      stillFrames = 0;
-      positionScrollItems();
-    } else {
-      stillFrames++;
-    }
-
-    // stop once scrolling settles, the next scroll event starts it again
-    if (stillFrames < settleFrames) {
-      requestAnimationFrame(positionOnFrame);
-    } else {
-      frameQueued = false;
-    }
-  }
-
-  function startPositioning() {
-    stillFrames = 0;
-    if (!frameQueued) {
-      frameQueued = true;
-      requestAnimationFrame(positionOnFrame);
     }
   }
 
@@ -529,7 +491,7 @@
   if (!prefersReducedMotion) {
     // place items along arc and move them on scroll
     updateScrollItems();
-    scroller?.addEventListener("scroll", startPositioning, { passive: true });
+    scroller?.addEventListener("scroll", positionScrollItems, { passive: true });
 
     // remeasure when item or view sizes change
     const itemResizeObserver = new ResizeObserver(updateScrollItems);
