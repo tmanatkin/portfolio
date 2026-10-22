@@ -58,6 +58,18 @@ import { Font } from "astro:assets";
     border-radius: 2px;
   }
 
+  /* clamp font to be fluid between arc item widths set on .arc-scroll */
+  .fluid-font {
+    --min-font-size-rem: var(--font-size-rem); /* if no min, just use font size */
+    font-size: clamp(
+      var(--min-font-size-rem) * 1rem,
+      var(--min-font-size-rem) * 1rem + (var(--font-size-rem) - var(--min-font-size-rem)) *
+        (100cqi - var(--arc-smallest-item-width-rem) * 1rem) /
+        (var(--arc-breakpoint-item-width-rem) - var(--arc-smallest-item-width-rem)),
+      var(--font-size-rem) * 1rem
+    );
+  }
+
   h1,
   h2 {
     text-wrap: balance;
@@ -75,7 +87,6 @@ import { Font } from "astro:assets";
   .tag-list {
     --item-gap: 1.75em;
     margin-right: calc(-1 * var(--item-gap)); /* cancels trailing margin on each line */
-    font-size: 0.875rem;
     text-wrap: balance;
     overflow: clip; /* hides separator before first item on each line */
   }
@@ -100,7 +111,7 @@ import { Font } from "astro:assets";
   .icon-links {
     display: flex;
     flex-wrap: wrap;
-    column-gap: 1em;
+    gap: 0.375em 1em;
   }
 
   .icon-link {

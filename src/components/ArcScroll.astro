@@ -43,6 +43,8 @@
     --arc-bend: var(--arc-line-gap); /* how far the arc curves in from the screen corners to mid-screen */
     --arc-side-space: calc(var(--arc-line-gap) + var(--arc-bend) + var(--arc-line-gap));
     --arc-item-width: min(100% - 2 * var(--arc-side-space), 55rem);
+    --arc-smallest-item-width-rem: 14; /* 320px screen arc item width, where fluid fonts reach their min */
+    --arc-breakpoint-item-width-rem: 35; /* breakpoint screen arc item width, where fluid fonts reach their max */
     --arc-item-gap: 15vh;
     --arc-half-view: 50vh;
     --arc-middle: 50vh;
@@ -50,11 +52,11 @@
     --arc-unfocused-opacity: 0.3;
   }
 
-  /* stacked project cards breakpoint */
-  @media (width < 78rem) {
+  /* small screen breakpoint */
+  @media (width < 70rem) {
     .arc-scroll {
       --arc-line-gap: min(5vw, 2rem);
-      --arc-item-width: min(100% - 2 * var(--arc-side-space), 35rem);
+      --arc-item-width: min(100% - 2 * var(--arc-side-space), var(--arc-breakpoint-item-width-rem) * 1rem);
     }
   }
 
@@ -105,6 +107,7 @@
 
   .arc-scroll-items :global(.arc-scroll-snap) {
     width: var(--arc-item-width);
+    container-type: inline-size; /* lets item text scale with the item width (cqi) */
     scroll-snap-align: center;
   }
 

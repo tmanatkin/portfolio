@@ -15,15 +15,17 @@ const { name, description, highlight, repo, website, stack, image } = project.da
   <Image src={image} alt="" loading="eager" />
   <div class="project-body">
     <div class="project-intro">
-      <h2>{name}</h2>
-      <div class="project-summary">
+      <h2 class="fluid-font">{name}</h2>
+      <div class="project-summary fluid-font">
         <p class="project-description">{description}</p>
         <p class="project-highlight">{highlight}</p>
       </div>
     </div>
     <div class="project-meta">
-      <ul class="tag-list" aria-label="Tech stack" role="list">{stack.map((item) => <li>{item}</li>)}</ul>
-      <ul class="icon-links" aria-label="Links" role="list">
+      <ul class="project-stack tag-list fluid-font" aria-label="Tech stack" role="list">
+        {stack.map((item) => <li>{item}</li>)}
+      </ul>
+      <ul class="project-links icon-links fluid-font" aria-label="Links" role="list">
         <li>
           <a class="icon-link repo-link" href={repo} aria-label={`${name} Repo`}>
             <span>Repo</span>
@@ -76,12 +78,13 @@ const { name, description, highlight, repo, website, stack, image } = project.da
   }
 
   .project h2 {
-    font-size: 1.75rem;
+    --font-size-rem: 1.5;
     font-weight: 600;
     line-height: 1.2;
   }
 
   .project-summary {
+    --font-size-rem: 1;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -105,14 +108,38 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     gap: 0.375rem;
   }
 
-  /* stacked project cards breakpoint */
-  @media (width < 78rem) {
+  .project-stack {
+    --font-size-rem: 0.875;
+  }
+
+  .project-links {
+    --font-size-rem: 1;
+  }
+
+  /* small screen breakpoint */
+  @media (width < 70rem) {
     .project {
       flex-direction: column;
     }
 
     .project img {
       width: 100%;
+    }
+
+    .project h2 {
+      --min-font-size-rem: 1.125;
+    }
+
+    .project-summary {
+      --min-font-size-rem: 0.75;
+    }
+
+    .project-stack {
+      --min-font-size-rem: 0.625;
+    }
+
+    .project-links {
+      --min-font-size-rem: 0.75;
     }
   }
 </style>

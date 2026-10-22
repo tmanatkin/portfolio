@@ -16,9 +16,9 @@ const { name, role, email } = profile.data;
 <header class="header">
   <hgroup>
     <h1><img src={nameLogo.src} width={nameLogo.width} height={nameLogo.height} alt={name} /></h1>
-    <p class="header-role">{role}</p>
+    <p class="header-role fluid-font">{role}</p>
   </hgroup>
-  <ul class="header-skills tag-list" aria-label="Skills" role="list">
+  <ul class="header-skills tag-list fluid-font" aria-label="Skills" role="list">
     {skills.map((skill) => <li>{skill.data.name}</li>)}
   </ul>
   <ContactLinks links={links} email={email} />
@@ -45,12 +45,26 @@ const { name, role, email } = profile.data;
   }
 
   .header-role {
-    font-size: 2.5rem;
+    --font-size-rem: 2.5;
     font-weight: 600;
     line-height: 1.2;
+    text-wrap: wrap;
   }
 
   .header-skills {
-    font-size: 1.125rem;
+    --font-size-rem: 1.125;
+  }
+
+  /* small screen breakpoint */
+  @media (width < 70rem) {
+    .header-role {
+      --font-size-rem: 2;
+      --min-font-size-rem: 1.125;
+    }
+
+    .header-skills {
+      --font-size-rem: 0.875;
+      --min-font-size-rem: 0.75;
+    }
   }
 </style>

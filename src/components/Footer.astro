@@ -17,10 +17,10 @@ const updatedText = updated.toLocaleDateString("en-US", { month: "short", year: 
 
 <footer class="footer">
   <div class="footer-about">
-    <p class="footer-credit">Created by {name}.</p>
+    <p class="footer-credit fluid-font">Created by {name}.</p>
     <ContactLinks links={links} email={email} />
   </div>
-  <p class="footer-source">
+  <p class="footer-source fluid-font">
     <span>Updated <time datetime={updated.toISOString()}>{updatedText}</time></span>
     <a class="icon-link repo-link" href={repo} aria-label="Portfolio Repo"><span>Repo</span></a>
   </p>
@@ -40,15 +40,27 @@ const updatedText = updated.toLocaleDateString("en-US", { month: "short", year: 
   }
 
   .footer-credit {
-    font-size: 1.5rem;
+    --font-size-rem: 1.5;
     font-weight: 600;
     line-height: 1.2;
     text-wrap: balance;
   }
 
   .footer-source {
+    --font-size-rem: 1;
     display: flex;
     gap: 1rem;
     color: var(--color-text-muted);
+  }
+
+  /* small screen breakpoint */
+  @media (width < 70rem) {
+    .footer-credit {
+      --min-font-size-rem: 1.125;
+    }
+
+    .footer-source {
+      --min-font-size-rem: 0.75;
+    }
   }
 </style>
