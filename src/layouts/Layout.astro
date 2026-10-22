@@ -50,6 +50,7 @@ import { Font } from "astro:assets";
   body {
     line-height: 1.5;
     overflow-wrap: break-word;
+    text-wrap: pretty;
   }
 
   :focus-visible {
@@ -70,15 +71,6 @@ import { Font } from "astro:assets";
     );
   }
 
-  h1,
-  h2 {
-    text-wrap: balance;
-  }
-
-  p {
-    text-wrap: pretty;
-  }
-
   ul {
     list-style: none;
     padding: 0;
@@ -87,7 +79,6 @@ import { Font } from "astro:assets";
   .tag-list {
     --item-gap: 1.75em;
     margin-right: calc(-1 * var(--item-gap)); /* cancels trailing margin on each line */
-    text-wrap: balance;
     overflow: clip; /* hides separator before first item on each line */
   }
 
