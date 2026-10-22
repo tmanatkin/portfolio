@@ -57,7 +57,7 @@
       "repo": "https://github.com/tmanatkin/insurance-risk-assessment",
       "description": "Home and auto insurance risk survey with AI recommendations.",
       "highlight": "Led development of a startup proof of concept on a small team.",
-      "stack": ["Next.js", "Vercel AI SDK", "TypeScript"],
+      "stack": ["Next.js", "AI SDK", "TypeScript"],
       "image": "../assets/projects/insurance-risk-assessment.png"
     },
     {
