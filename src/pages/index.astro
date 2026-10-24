@@ -21,6 +21,8 @@ const projects = (await getCollection("projects")).sort(byPosition);
 ---
 
 <Layout>
+  {/* fetch css mask icons early for links to prevent any loading delay */}
+  {links.map((link) => <link slot="head" rel="preload" as="image" href={link.data.icon.src} crossorigin="anonymous" />)}
   <ArcScroll>
     <ArcScrollSnap><Header profile={profile} links={links} skills={skills} /></ArcScrollSnap>
     <main>
