@@ -1,3 +1,10 @@
+<script is:inline>
+  // hide page content while loading
+  document.documentElement.classList.add("arc-scroll-js");
+  // fallback, show flat page if arc scroll is never enabled
+  setTimeout(() => document.documentElement.classList.remove("arc-scroll-js"), 3000);
+</script>
+
 <div class="arc-scroll">
   <div class="arc-scroll-view">
     <div class="arc-scroll-line">
@@ -22,6 +29,13 @@
   /* arc scroll is the scroller instead of the page */
   :global(html:has(.arc-scroll.enabled)) {
     overflow: hidden;
+  }
+
+  /* hide page on load, will remove when arc scroll is enabled by script */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.arc-scroll-js) .arc-scroll:not(.enabled) {
+      visibility: hidden;
+    }
   }
 
   .arc-scroll.enabled {
