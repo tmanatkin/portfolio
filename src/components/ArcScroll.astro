@@ -57,7 +57,8 @@
     --arc-bend: var(--arc-line-gap); /* how far the arc curves in from the screen corners to mid-screen */
     --arc-side-space: calc(var(--arc-line-gap) + var(--arc-bend) + var(--arc-line-gap));
     --arc-item-width: min(100% - 2 * var(--arc-side-space), 55rem);
-    --arc-smallest-item-width-rem: 14; /* 320px screen arc item width, where fluid fonts reach their min */
+    --arc-item-left: calc((100% - var(--arc-item-width)) / 2);
+    --arc-smallest-item-width-rem: 15.5; /* 320px screen arc item width, where fluid fonts reach their min */
     --arc-breakpoint-item-width-rem: 35; /* breakpoint screen arc item width, where fluid fonts reach their max */
     --arc-item-gap: 15vh;
     --arc-half-view: 50vh;
@@ -70,7 +71,17 @@
   @media (width < 70rem) {
     .arc-scroll {
       --arc-line-gap: min(5vw, 2rem);
-      --arc-item-width: min(100% - 2 * var(--arc-side-space), var(--arc-breakpoint-item-width-rem) * 1rem);
+      --arc-item-min-right-space: calc(1.5 * var(--arc-line-gap));
+      --arc-item-shrink-width: calc(40% + 10.3125rem);
+      --arc-item-width: min(
+        clamp(
+          100% - 2 * var(--arc-side-space),
+          var(--arc-item-shrink-width),
+          100% - var(--arc-side-space) - var(--arc-item-min-right-space)
+        ),
+        var(--arc-breakpoint-item-width-rem) * 1rem
+      );
+      --arc-item-left: max(var(--arc-side-space), (100% - var(--arc-item-width)) / 2);
     }
   }
 
@@ -94,7 +105,7 @@
     padding-block: var(--arc-half-view); /* padding so the first and last items can reach mid-screen */
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
   }
 
   /* move snap points to sit right at the scroll edge */
@@ -121,6 +132,7 @@
 
   .arc-scroll-items :global(.arc-scroll-snap) {
     width: var(--arc-item-width);
+    margin-left: var(--arc-item-left);
     container-type: inline-size; /* lets item text scale with the item width (cqi) */
     scroll-snap-align: center;
   }
@@ -186,7 +198,7 @@
     position: absolute;
     top: 50%;
     translate: 0 -50%;
-    left: calc((100% - var(--arc-item-width)) / 2 - var(--arc-radius) - var(--arc-line-radius));
+    left: calc(var(--arc-item-left) - var(--arc-radius) - var(--arc-line-radius));
     width: calc(var(--arc-line-radius) * 2);
     overflow: visible; /* prevent stroke from being clipped */
     fill: none;
@@ -198,7 +210,7 @@
   .arc-scroll-ticks {
     position: absolute;
     top: 50%;
-    left: calc((100% - var(--arc-item-width)) / 2 - var(--arc-radius));
+    left: calc(var(--arc-item-left) - var(--arc-radius));
   }
 
   .arc-scroll.enabled .arc-scroll-ticks {
