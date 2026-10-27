@@ -46,7 +46,7 @@
       "id": "race-raffle",
       "name": "Race Raffle",
       "repo": "https://github.com/tmanatkin/race-raffle",
-      "description": "Raffle system for race fundraisers with verified prize pickup.",
+      "description": "Fundraiser raffle system with fair prize distribution.",
       "highlight": "Used by 150+ people at a local nonprofit event.",
       "stack": ["Next.js", "Supabase", "TypeScript"],
       "image": "../assets/projects/race-raffle.png"
@@ -55,8 +55,8 @@
       "id": "insurance-risk-assessment",
       "name": "Insurance Risk Assessment",
       "repo": "https://github.com/tmanatkin/insurance-risk-assessment",
-      "description": "Home and auto insurance risk survey with AI recommendations.",
-      "highlight": "Led development of a startup proof of concept on a small team.",
+      "description": "Home and auto insurance survey with AI insights.",
+      "highlight": "Led development for a startup proof of concept.",
       "stack": ["Next.js", "AI SDK", "TypeScript"],
       "image": "../assets/projects/insurance-risk-assessment.png"
     },
@@ -64,8 +64,8 @@
       "id": "bagpipe-tuner",
       "name": "Bagpipe Tuner",
       "repo": "https://github.com/tmanatkin/bagpipe-tuner",
-      "description": "Tuner for the Highland bagpipes with drone filtering.",
-      "highlight": "Built to learn pitch detection for an instrument I play.",
+      "description": "Tuner for Highland bagpipes with drone filtering.",
+      "highlight": "Learned pitch detection through an instrument I play.",
       "website": "https://bagpipe-tuner.fly.dev",
       "stack": ["Svelte", "TypeScript", "Docker"],
       "image": "../assets/projects/bagpipe-tuner.png"
@@ -74,8 +74,8 @@
       "id": "resume-builder",
       "name": "Resume Builder",
       "repo": "https://github.com/tmanatkin/resume-builder",
-      "description": "Resume and cover letter builder that converts Markdown to PDF.",
-      "highlight": "Built for and still used to update my resume.",
+      "description": "Markdown to PDF converter for resumes and cover letters.",
+      "highlight": "Built to create and maintain my own resume.",
       "stack": ["Node.js", "Markdown", "Puppeteer"],
       "image": "../assets/projects/resume-builder.png"
     },
@@ -83,8 +83,8 @@
       "id": "catan-board-generator",
       "name": "Catan Board Generator",
       "repo": "https://github.com/tmanatkin/catan-board-generator",
-      "description": "Wave function collapse algorithm for Catan using custom rules.",
-      "highlight": "Explored procedural generation with a favorite game.",
+      "description": "Wave function collapse algorithm for Catan.",
+      "highlight": "Explored procedural generation with a board game.",
       "stack": ["TypeScript", "Vite"],
       "image": "../assets/projects/catan-board-generator.png"
     },
@@ -92,8 +92,8 @@
       "id": "is120-intro-to-web-dev",
       "name": "IS 120 - Intro to Web Dev",
       "repo": "https://github.com/tmanatkin/is120-intro-to-web-dev",
-      "description": "Teaching materials for a web development class at BYU.",
-      "highlight": "Taught as the Winter 2026 instructor.",
+      "description": "Lessons and assignments for a web development class.",
+      "highlight": "Redesigned course content and taught at BYU.",
       "stack": ["HTML", "CSS", "JavaScript"],
       "image": "../assets/projects/is120-intro-to-web-dev.png"
     },
@@ -102,7 +102,7 @@
       "name": "Signal CIO",
       "repo": "https://github.com/tmanatkin/signal-cio",
       "description": "Website for a fractional CIO and IT strategy consultant.",
-      "highlight": "Designed for a family member's consulting business.",
+      "highlight": "Made for a family member's consulting business.",
       "website": "https://signalcio.com",
       "stack": ["React", "TypeScript", "Vite"],
       "image": "../assets/projects/signal-cio.png"
@@ -112,7 +112,7 @@
       "name": "Dodo 2D Platformer",
       "repo": "https://github.com/tmanatkin/dodo-2d-platformer",
       "description": "2D Unity platformer featuring a dodo.",
-      "highlight": "Made for fun to learn game development in C#.",
+      "highlight": "Created to learn game development in C#.",
       "website": "https://tmanatkin.github.io/dodo-2d-platformer",
       "stack": ["Unity", "C#"],
       "image": "../assets/projects/dodo-2d-platformer.png"
@@ -121,7 +121,7 @@
       "id": "nextjs-supabase-starter",
       "name": "Next.js Supabase Starter",
       "repo": "https://github.com/tmanatkin/nextjs-supabase-starter",
-      "description": "Starter template for a Next.js app with Supabase authentication.",
+      "description": "Template for a Next.js app with Supabase authentication.",
       "highlight": "Used as the base for Insurance Risk Assessment.",
       "stack": ["Next.js", "Supabase", "TypeScript"],
       "image": "../assets/projects/nextjs-supabase-starter.png"
@@ -130,8 +130,8 @@
       "id": "portfolio-2024",
       "name": "Portfolio 2024",
       "repo": "https://github.com/tmanatkin/portfolio-2024",
-      "description": "Personal developer portfolio website.",
-      "highlight": "Archived and replaced with a redesign.",
+      "description": "Personal portfolio website.",
+      "highlight": "Archived and replaced by the current redesign.",
       "website": "https://tanneratkin.com",
       "stack": ["React", "TypeScript", "Vite"],
       "image": "../assets/projects/portfolio-2024.png"
