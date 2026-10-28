@@ -16,7 +16,7 @@ const { name, role, email } = profile.data;
 <header class="header">
   <hgroup>
     <h1><img src={nameLogo.src} width={nameLogo.width} height={nameLogo.height} alt={name} /></h1>
-    <p class="header-role fluid-font">{role}</p>
+    <p class="header-role heading fluid-font">{role}</p>
   </hgroup>
   <ul class="header-skills tag-list fluid-font" aria-label="Skills" role="list">
     {skills.map((skill) => <li>{skill.data.name}</li>)}
@@ -46,8 +46,6 @@ const { name, role, email } = profile.data;
 
   .header-role {
     --font-size-rem: 2.5;
-    font-weight: 600;
-    line-height: 1.2;
     text-wrap: wrap; /* override global set text-wrap pretty */
   }
 

@@ -17,7 +17,7 @@ const updatedText = updated.toLocaleDateString("en-US", { month: "short", year: 
 
 <footer class="footer">
   <div class="footer-about">
-    <p class="footer-credit fluid-font">Created by {name}.</p>
+    <p class="footer-credit heading fluid-font">Created by {name}.</p>
     <ContactLinks links={links} email={email} />
   </div>
   <p class="footer-source">
@@ -41,8 +41,6 @@ const updatedText = updated.toLocaleDateString("en-US", { month: "short", year: 
 
   .footer-credit {
     --font-size-rem: 1.5;
-    font-weight: 600;
-    line-height: 1.2;
   }
 
   .footer-source {
