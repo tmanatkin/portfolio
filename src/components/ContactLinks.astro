@@ -104,6 +104,11 @@ const { links, email } = Astro.props;
     .contact-links {
       font-size: 1rem;
     }
+
+    /* email sits on its own line */
+    .contact-links li:last-child {
+      flex-basis: 100%;
+    }
   }
 </style>
 
