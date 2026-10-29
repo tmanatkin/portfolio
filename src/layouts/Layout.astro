@@ -116,6 +116,7 @@ import { Font } from "astro:assets";
     display: inline-flex;
     align-items: center;
     gap: 0.15em;
+    letter-spacing: -0.025em;
     text-decoration: none;
     font-weight: 600;
     color: var(--color-primary-light);
@@ -158,5 +159,12 @@ import { Font } from "astro:assets";
 
   .website-link {
     --icon: url("../assets/icons/ph--globe-simple-bold.svg");
+  }
+
+  /* small screen breakpoint */
+  @media (width < 70rem) {
+    .icon-links {
+      column-gap: 0.5em;
+    }
   }
 </style>

@@ -58,7 +58,7 @@
     --arc-side-space: calc(var(--arc-line-gap) + var(--arc-bend) + var(--arc-line-gap));
     --arc-item-width: min(100% - 2 * var(--arc-side-space), 55rem);
     --arc-item-left: calc((100% - var(--arc-item-width)) / 2);
-    --arc-smallest-item-width-rem: 15.5; /* 320px screen arc item width, where fluid fonts reach their min */
+    --arc-smallest-item-width-rem: 16.6; /* 320px screen arc item width, where fluid fonts reach their min */
     --arc-breakpoint-item-width-rem: 35; /* breakpoint screen arc item width, where fluid fonts reach their max */
     --arc-item-gap: 15vh;
     --arc-half-view: 50vh;
@@ -70,9 +70,9 @@
   /* small screen breakpoint */
   @media (width < 70rem) {
     .arc-scroll {
-      --arc-line-gap: min(5vw, 2rem);
-      --arc-item-min-right-space: calc(1.5 * var(--arc-line-gap));
-      --arc-item-shrink-width: calc(40% + 10.3125rem);
+      --arc-line-gap: min(4vw, 2rem);
+      --arc-item-min-right-space: calc(1.25 * var(--arc-line-gap));
+      --arc-item-shrink-width: calc(40% + 11.825rem);
       --arc-item-width: min(
         clamp(
           100% - 2 * var(--arc-side-space),
