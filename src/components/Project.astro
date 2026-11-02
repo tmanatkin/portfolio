@@ -54,9 +54,10 @@ const { name, description, highlight, repo, website, stack, image } = project.da
   }
 
   .project img {
-    align-self: center;
+    align-self: start;
     flex-shrink: 0; /* prevents unloaded image from shrinking */
     width: 50%;
+    margin: 0.25rem 0;
     height: auto;
     border-radius: 3px;
     background-color: var(--color-text); /* fills image space while loading */
@@ -111,7 +112,7 @@ const { name, description, highlight, repo, website, stack, image } = project.da
   }
 
   /* small screen breakpoint */
-  @media (width < 70rem) {
+  @media (width < 65rem) {
     .project {
       flex-direction: column;
       gap: 1.25rem;
@@ -119,6 +120,7 @@ const { name, description, highlight, repo, website, stack, image } = project.da
 
     .project img {
       width: 100%;
+      margin: 0;
     }
 
     .project h2 {
