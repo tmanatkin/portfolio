@@ -16,7 +16,7 @@ const { name, description, highlight, repo, website, stack, image } = project.da
   <div class="project-body">
     <div class="project-intro">
       <h2 class="heading fluid-font">{name}</h2>
-      <div class="project-summary">
+      <div class="project-summary fluid-font">
         <p class="project-description">{description}</p>
         <p class="project-highlight">{highlight}</p>
       </div>
@@ -86,7 +86,7 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    font-size: 1.125rem;
+    --font-size-rem: 1.125;
   }
 
   .project-description {
@@ -132,7 +132,7 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     }
 
     .project-summary {
-      font-size: 1rem;
+      --min-font-size-rem: 1;
     }
 
     .project-stack {
