@@ -111,7 +111,7 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     --font-size-rem: 0.875;
   }
 
-  /* small screen breakpoint */
+  /* medium */
   @media (width < 70rem) {
     .project {
       flex-direction: column;
@@ -127,17 +127,20 @@ const { name, description, highlight, repo, website, stack, image } = project.da
       flex-grow: 1;
       width: auto;
     }
+  }
 
+  /* small */
+  @media (width < 40rem) {
     .project h2 {
-      --min-font-size-rem: 1.125;
+      --min-font-size-rem: 1.1875;
     }
 
     .project-summary {
-      --min-font-size-rem: 1;
+      --min-font-size-rem: 1.0625;
     }
 
     .project-stack {
-      --min-font-size-rem: 0.8125;
+      --min-font-size-rem: 0.875;
     }
   }
 </style>

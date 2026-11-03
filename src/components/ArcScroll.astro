@@ -67,7 +67,7 @@
     --arc-unfocused-opacity: 0.3;
   }
 
-  /* small screen breakpoint */
+  /* medium */
   @media (width < 70rem) {
     .arc-scroll {
       --arc-line-gap: min(4vw, 2rem);
@@ -82,6 +82,13 @@
         var(--arc-breakpoint-item-width-rem) * 1rem
       );
       --arc-item-left: max(var(--arc-side-space), (100% - var(--arc-item-width)) / 2);
+    }
+  }
+
+  /* small */
+  @media (width < 40rem) {
+    .arc-scroll {
+      --arc-breakpoint-item-width-rem: 20;
     }
   }
 

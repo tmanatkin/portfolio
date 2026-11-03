@@ -53,16 +53,25 @@ const { name, role, email } = profile.data;
     --font-size-rem: 1.125;
   }
 
-  /* small screen breakpoint */
+  /* medium */
   @media (width < 70rem) {
     .header-role {
       --font-size-rem: 2;
-      --min-font-size-rem: 1.5625;
     }
 
     .header-skills {
       --font-size-rem: 1;
-      --min-font-size-rem: 0.8125;
+    }
+  }
+
+  /* small */
+  @media (width < 40rem) {
+    .header-role {
+      --min-font-size-rem: 1.6875;
+    }
+
+    .header-skills {
+      --min-font-size-rem: 0.875;
     }
   }
 </style>

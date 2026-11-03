@@ -162,10 +162,16 @@ import { Font } from "astro:assets";
     --icon: url("../assets/icons/ph--globe-simple-bold.svg");
   }
 
-  /* small screen breakpoint */
+  /* medium */
   @media (width < 70rem) {
     .icon-links {
       column-gap: 0.5em;
+    }
+  }
+
+  /* small */
+  @media (width < 40rem) {
+    .icon-links {
       --min-font-size-rem: 1;
     }
   }
