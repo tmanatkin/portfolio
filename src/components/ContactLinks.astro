@@ -9,7 +9,7 @@ interface Props {
 const { links, email } = Astro.props;
 ---
 
-<ul class="contact-links icon-links" aria-label="Links" role="list">
+<ul class="contact-links icon-links fluid-font"aria-label="Links" role="list">
   {
     links.map((link) => (
       <li>
@@ -27,10 +27,6 @@ const { links, email } = Astro.props;
 </ul>
 
 <style>
-  .contact-links {
-    font-size: 1.125rem;
-  }
-
   .contact-links-email {
     display: inline-flex;
     align-items: center;
@@ -101,10 +97,6 @@ const { links, email } = Astro.props;
 
   /* small screen breakpoint */
   @media (width < 70rem) {
-    .contact-links {
-      font-size: 1rem;
-    }
-
     /* email sits on its own line */
     .contact-links li:last-child {
       flex-basis: 100%;
