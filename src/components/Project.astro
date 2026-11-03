@@ -54,10 +54,9 @@ const { name, description, highlight, repo, website, stack, image } = project.da
   }
 
   .project img {
-    align-self: start;
-    flex-shrink: 0; /* prevents unloaded image from shrinking */
-    width: 50%;
-    margin: 0.25rem 0;
+    align-self: center;
+    flex: 1;
+    min-width: 0; /* lets image shrink below its width attribute */
     height: auto;
     border-radius: 3px;
     background-color: var(--color-text); /* fills image space while loading */
@@ -120,8 +119,8 @@ const { name, description, highlight, repo, website, stack, image } = project.da
     }
 
     .project img {
+      flex: none;
       width: 100%;
-      margin: 0;
     }
 
     .project-body {
