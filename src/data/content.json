@@ -37,7 +37,7 @@
     {
       "id": "resume",
       "label": "Resume",
-      "url": "/portfolio/Tanner_Atkin_Resume.pdf",
+      "url": "/Tanner_Atkin_Resume.pdf",
       "icon": "../assets/icons/ph--file-text-bold.svg"
     }
   ],
@@ -132,7 +132,6 @@
       "repo": "https://github.com/tmanatkin/portfolio-2024",
       "description": "Personal portfolio website.",
       "highlight": "Archived and replaced by the current redesign.",
-      "website": "https://tanneratkin.com",
       "stack": ["React", "TypeScript", "Vite"],
       "image": "../assets/projects/portfolio-2024.png"
     }

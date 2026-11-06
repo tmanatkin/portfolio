@@ -2,8 +2,7 @@
 import { defineConfig, fontProviders } from "astro/config";
 
 export default defineConfig({
-  site: "https://tmanatkin.github.io",
-  base: "/portfolio/",
+  site: "https://tanneratkin.com",
   fonts: [
     {
       provider: fontProviders.fontsource(),
