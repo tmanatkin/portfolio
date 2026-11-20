@@ -60,7 +60,7 @@
     --arc-item-height: 0px; /* most common item height, set by the script */
     --arc-item-gap: max(2rem, min(15svh, var(--arc-middle) - var(--arc-item-height))); /* shows half of the arc items */
     --arc-middle: 50vh;
-    --arc-fade-length: 40vh; /* distance from mid-screen where items are fully faded */
+    --arc-fade-length: 40svh; /* distance from mid-screen where items are fully faded */
     --arc-unfocused-opacity: 0.3;
   }
 
@@ -174,8 +174,8 @@
 
   .arc-scroll-line {
     --arc-line-radius: calc(var(--arc-radius) - var(--arc-item-line-gap));
-    --arc-line-focus-length: 15vh; /* distance from mid-screen the arc line stays at full opacity */
-    --arc-line-fade-length: 45vh; /* distance from mid-screen where the arc line reaches unfocused opacity */
+    --arc-line-focus-length: 15svh; /* distance from mid-screen the arc line stays at full opacity */
+    --arc-line-fade-length: 45svh; /* distance from mid-screen where the arc line reaches unfocused opacity */
     position: sticky; /* keeps the line at mid-screen on the flat page */
     top: 50%;
     height: 0;
