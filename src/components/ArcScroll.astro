@@ -48,20 +48,16 @@
   }
 
   .arc-scroll {
-    --arc-min-radius: 200vh; /* keeps short wide screen arc from curving too much */
-    --arc-max-height: 60rem; /* keeps tall screen arc from going too flat */
-    --arc-radius: var(--arc-min-radius); /* set by JS from the bend */
+    --arc-radius: 100rem;
     --arc-angle: 0.75; /* angle arc is limited to on each side of the center */
     --arc-length: calc(var(--arc-radius) * var(--arc-angle));
     --arc-line-gap: min(5vw, 3.5rem); /* space on both sides of the arc line */
-    --arc-bend: var(--arc-line-gap); /* how far the arc curves in from the screen corners to mid-screen */
-    --arc-side-space: calc(var(--arc-line-gap) + var(--arc-bend) + var(--arc-line-gap));
+    --arc-side-space: calc(3 * var(--arc-line-gap));
     --arc-item-width: min(100% - 2 * var(--arc-side-space), 55rem);
     --arc-item-left: calc((100% - var(--arc-item-width)) / 2);
     --arc-smallest-item-width-rem: 16.6; /* 320px screen arc item width, where fluid fonts reach their min */
     --arc-breakpoint-item-width-rem: 30; /* breakpoint screen arc item width, where fluid fonts reach their max */
     --arc-item-gap: 15vh;
-    --arc-half-view: 50vh;
     --arc-middle: 50vh;
     --arc-fade-length: 40vh; /* distance from mid-screen where items are fully faded */
     --arc-unfocused-opacity: 0.3;
@@ -109,7 +105,7 @@
 
   .arc-scroll-items {
     overflow: clip;
-    padding-block: var(--arc-half-view); /* padding so the first and last items can reach mid-screen */
+    padding-block: var(--arc-middle); /* padding so the first and last items can reach mid-screen */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -300,33 +296,17 @@
     temp.style.position = "absolute";
     temp.style.visibility = "hidden";
     view.appendChild(temp);
-    temp.style.width = "var(--arc-line-gap)";
-    const lineGap = temp.offsetWidth;
-    temp.style.width = "var(--arc-bend)";
-    const bend = temp.offsetWidth;
-    temp.style.width = "var(--arc-half-view)";
-    const halfView = temp.offsetWidth;
-    temp.style.width = "var(--arc-max-height)";
-    const maxHeight = temp.offsetWidth;
-    temp.style.width = "var(--arc-min-radius)";
-    const minRadius = temp.offsetWidth;
-
-    // view fills the arc scroll, so half its height is the visible middle
-    middle = view.getBoundingClientRect().height / 2;
-    scroller.style.setProperty("--arc-middle", `${middle}px`);
-
-    // arc line circles through mid-screen and screen corners, capped by max height
-    const anchorY = Math.min(halfView, maxHeight / 2);
-    const anchorRadius = (anchorY * anchorY + bend * bend) / (2 * bend);
-    arcRadius = Math.max(minRadius, anchorRadius + lineGap);
-    scroller.style.setProperty("--arc-radius", `${arcRadius}px`);
-
-    // arc length depends on the radius set above
+    temp.style.width = "var(--arc-radius)";
+    arcRadius = temp.offsetWidth;
     temp.style.height = "var(--arc-length)";
     arcLength = temp.offsetHeight;
     temp.style.width = "var(--arc-fade-length)";
     fadeLength = temp.offsetWidth;
     temp.remove();
+
+    // view fills the arc scroll, so half its height is the visible middle
+    middle = view.getBoundingClientRect().height / 2;
+    scroller.style.setProperty("--arc-middle", `${middle}px`);
 
     const lineRadius = lineSvg.getBoundingClientRect().width / 2;
 
