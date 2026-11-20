@@ -57,7 +57,8 @@
     --arc-item-left: calc((100% - var(--arc-item-width)) / 2);
     --arc-smallest-item-width-rem: 16.6; /* 320px screen arc item width, where fluid fonts reach their min */
     --arc-breakpoint-item-width-rem: 30; /* breakpoint screen arc item width, where fluid fonts reach their max */
-    --arc-item-gap: 15vh;
+    --arc-item-height: 0px; /* most common item height, set by the script */
+    --arc-item-gap: max(2rem, min(15svh, var(--arc-middle) - var(--arc-item-height))); /* shows half of the arc items */
     --arc-middle: 50vh;
     --arc-fade-length: 40vh; /* distance from mid-screen where items are fully faded */
     --arc-unfocused-opacity: 0.3;
@@ -310,6 +311,14 @@
     scroller.style.setProperty("--arc-middle", `${middle}px`);
 
     const lineRadius = lineSvg.getBoundingClientRect().width / 2;
+
+    // most items are project cards, so the middle height is the card height
+    const heights: number[] = [];
+    for (const snap of items.querySelectorAll(".arc-scroll-snap")) {
+      heights.push(snap.getBoundingClientRect().height);
+    }
+    heights.sort((a, b) => a - b);
+    scroller.style.setProperty("--arc-item-height", `${heights[Math.floor(heights.length / 2)]}px`);
 
     // first and last item half heights for the padding that centers them at the scroll edges
     const first = items.firstElementChild as HTMLElement;
