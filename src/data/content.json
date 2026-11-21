@@ -132,6 +132,7 @@
       "repo": "https://github.com/tmanatkin/portfolio-2024",
       "description": "Personal portfolio website.",
       "highlight": "Archived and replaced by the current redesign.",
+      "website": "https://tmanatkin.github.io/portfolio-2024",
       "stack": ["React", "TypeScript", "Vite"],
       "image": "../assets/projects/portfolio-2024.png"
     }
