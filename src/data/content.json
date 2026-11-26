@@ -71,6 +71,15 @@
       "image": "../assets/projects/bagpipe-tuner.png"
     },
     {
+      "id": "is120-intro-to-web-dev",
+      "name": "IS 120 - Intro to Web Dev",
+      "repo": "https://github.com/tmanatkin/is120-intro-to-web-dev",
+      "description": "Lessons and assignments for a web dev class.",
+      "highlight": "Redesigned course content and taught at BYU.",
+      "stack": ["HTML", "CSS", "JavaScript"],
+      "image": "../assets/projects/is120-intro-to-web-dev.png"
+    },
+    {
       "id": "resume-builder",
       "name": "Resume Builder",
       "repo": "https://github.com/tmanatkin/resume-builder",
@@ -89,15 +98,6 @@
       "image": "../assets/projects/catan-board-generator.png"
     },
     {
-      "id": "is120-intro-to-web-dev",
-      "name": "IS 120 - Intro to Web Dev",
-      "repo": "https://github.com/tmanatkin/is120-intro-to-web-dev",
-      "description": "Lessons and assignments for a web dev class.",
-      "highlight": "Redesigned course content and taught at BYU.",
-      "stack": ["HTML", "CSS", "JavaScript"],
-      "image": "../assets/projects/is120-intro-to-web-dev.png"
-    },
-    {
       "id": "signal-cio",
       "name": "Signal CIO",
       "repo": "https://github.com/tmanatkin/signal-cio",
@@ -106,16 +106,6 @@
       "website": "https://signalcio.com",
       "stack": ["React", "TypeScript", "Vite"],
       "image": "../assets/projects/signal-cio.png"
-    },
-    {
-      "id": "dodo-2d-platformer",
-      "name": "Dodo 2D Platformer",
-      "repo": "https://github.com/tmanatkin/dodo-2d-platformer",
-      "description": "2D Unity platformer featuring a dodo.",
-      "highlight": "Created to learn game development in C#.",
-      "website": "https://tmanatkin.github.io/dodo-2d-platformer",
-      "stack": ["Unity", "C#"],
-      "image": "../assets/projects/dodo-2d-platformer.png"
     },
     {
       "id": "nextjs-supabase-starter",
@@ -127,14 +117,14 @@
       "image": "../assets/projects/nextjs-supabase-starter.png"
     },
     {
-      "id": "portfolio-2024",
-      "name": "Portfolio 2024",
-      "repo": "https://github.com/tmanatkin/portfolio-2024",
-      "description": "Personal portfolio website.",
-      "highlight": "Archived and replaced by the current redesign.",
-      "website": "https://tmanatkin.github.io/portfolio-2024",
-      "stack": ["React", "TypeScript", "Vite"],
-      "image": "../assets/projects/portfolio-2024.png"
+      "id": "dodo-2d-platformer",
+      "name": "Dodo 2D Platformer",
+      "repo": "https://github.com/tmanatkin/dodo-2d-platformer",
+      "description": "2D Unity platformer featuring a dodo.",
+      "highlight": "Created to learn game development in C#.",
+      "website": "https://tmanatkin.github.io/dodo-2d-platformer",
+      "stack": ["Unity", "C#"],
+      "image": "../assets/projects/dodo-2d-platformer.png"
     }
   ]
 }
